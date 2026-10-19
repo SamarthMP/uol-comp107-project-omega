@@ -4,6 +4,7 @@ using Backend.Auth.Providers;
 using Backend.Data;
 using Backend.Email;
 using Backend.Helpers;
+using Backend.Repairs;
 using Backend.Storage;
 using Fido2NetLib;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -19,8 +20,8 @@ using System.Text.Json;
 using System.Threading.RateLimiting;
 
 // TODO: (IMPORTANT) Configure these properly for production
-AuthConfig.PrimaryHost = "https://samsidparty.com";
-AuthConfig.AppName = "SamsidParty";
+AuthConfig.PrimaryHost = "http://localhost:6768";
+AuthConfig.AppName = "Meadow House Repairs";
 AuthConfig.AuthProviders.Add(new GithubAuthProvider());
 
 Keys.Load();
@@ -61,8 +62,25 @@ builder.Services.AddRateLimiter(options =>
     {
         var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
         var username = "_";
+        var grantType = "_";
         if (context.Request.HasFormContentType)
+        {
             username = context.Request.Form["username"].FirstOrDefault() ?? "_";
+            grantType = context.Request.Form["grant_type"].FirstOrDefault() ?? "_";
+        }
+
+        // Demo sessions are created per browser tab, so they get their own, more generous bucket
+        if (grantType == DemoAccounts.GrantType)
+        {
+            return RateLimitPartition.GetSlidingWindowLimiter($"demo:{ip}", _ => new SlidingWindowRateLimiterOptions
+            {
+                PermitLimit = 60,
+                Window = TimeSpan.FromMinutes(10),
+                SegmentsPerWindow = 5,
+                QueueLimit = 0,
+            });
+        }
+
         var partitionKey = $"{ip}:{username}";
 
         return RateLimitPartition.GetSlidingWindowLimiter(partitionKey, _ => new SlidingWindowRateLimiterOptions
@@ -105,6 +123,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 
 builder.Services.AddScoped<IBlobStorage, DatabaseBlobStorage>();
+builder.Services.AddRepairs();
 
 var smtpConfig = SmtpConfig.FromEnvironment();
 builder.Services.AddSingleton(smtpConfig);
@@ -132,6 +151,7 @@ builder.Services.AddOpenIddict()
         options.AllowCustomFlow("urn:custom:2fa");
         options.AllowCustomFlow("urn:custom:external");
         options.AllowCustomFlow("urn:custom:sudo");
+        options.AllowCustomFlow(DemoAccounts.GrantType);
 
         options.AcceptAnonymousClients();
 
@@ -152,7 +172,10 @@ builder.Services.AddOpenIddict()
     .AddValidation(options =>
     {
         options.UseLocalServer();
-        options.UseAspNetCore();
+
+        // Tokens in URLs are only accepted for the realtime hub (see HubAccessTokenMiddleware)
+        options.UseAspNetCore()
+            .DisableAccessTokenExtractionFromQueryString();
     });
 
 builder.Services.Configure<Microsoft.AspNetCore.Authentication.AuthenticationOptions>(options =>
@@ -227,6 +250,7 @@ if (app.Environment.IsDevelopment())
 app.Use(async (context, next) =>
 {
     context.Response.Headers["X-Frame-Options"] = "SAMEORIGIN";
+    context.Response.Headers["X-Content-Type-Options"] = "nosniff";
     await next();
 });
 
@@ -238,11 +262,13 @@ app.UseForwardedHeaders();
 
 app.UseRateLimiter();
 
+app.UseHubAccessToken();
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseHttpsRedirection();
 app.MapControllers();
+app.MapRepairsHub();
 
 #region SEO and Fallback Routing
 

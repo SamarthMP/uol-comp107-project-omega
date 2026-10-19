@@ -272,16 +272,7 @@ namespace Backend.Auth.Controllers
         /// </summary>
         protected string? GetProfilePictureUrl(ApplicationUser user)
         {
-            if (user.ProfilePicture == null) return null;
-
-            if (user.ProfilePicture.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
-                user.ProfilePicture.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
-                return user.ProfilePicture;
-
-            if (user.ProfilePicture.StartsWith("blob:"))
-                return $"/api/auth/pfp/{Uri.EscapeDataString(user.ProfilePicture)}";
-
-            return null;
+            return ProfilePictureUrls.Resolve(user.ProfilePicture);
         }
 
         /// <summary>

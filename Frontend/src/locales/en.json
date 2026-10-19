@@ -1,51 +1,268 @@
 {
+  "brand": {
+    "houseName": "Meadow House",
+    "product": "Repairs",
+    "fullName": "Meadow House Repairs"
+  },
   "common": {
-    "signIn": "Sign In",
-    "signUp": "Sign Up",
-    "signOut": "Sign Out",
     "cancel": "Cancel",
     "back": "Back",
     "save": "Save",
-    "confirm": "Confirm",
-    "continue": "Continue",
-    "register": "Register",
-    "remove": "Remove",
     "close": "Close",
-    "or": "or",
-    "email": "Email",
-    "password": "Password",
     "settings": "Settings",
-    "home": "Home",
     "loading": "Loading",
+    "retry": "Try again",
     "unknownError": "Unknown error"
+  },
+  "format": {
+    "dateLocale": "en-GB",
+    "justNow": "just now"
+  },
+  "layout": {
+    "skipToContent": "Skip to main content"
+  },
+  "nav": {
+    "label": "Main",
+    "repairs": "Repairs"
+  },
+  "userMenu": {
+    "open": "Account menu for {{name}}",
+    "demoSession": "Demo session",
+    "title": "Your account",
+    "description": "Theme, settings and demo session options"
+  },
+  "demoSession": {
+    "description": "You'll be signed in automatically with a new demo account, no password needed",
+    "settingUp": "Setting up your demo session",
+    "failedTitle": "Couldn't start a demo session",
+    "failed": "Check that the server is running, then try again",
+    "retry": "Try again",
+    "newSession": "Start a new demo session",
+    "heading": "Demo session",
+    "settingsDescription": "This browser session uses a temporary demo account. Starting a new session signs you in as a different demo user, and every repair stays on the board"
+  },
+  "presence": {
+    "alsoViewing": "Also viewing: {{names}}",
+    "onlineButton_one": "{{count}} person online, show who",
+    "onlineButton_other": "{{count}} people online, show who",
+    "onlineCount_one": "{{count}} online",
+    "onlineCount_other": "{{count}} online",
+    "onlineTitle": "Online now",
+    "you": "(you)",
+    "viewing": "Viewing",
+    "browsing": "Browsing the board",
+    "connection": {
+      "connecting": "Connecting",
+      "connected": "Live",
+      "reconnecting": "Reconnecting",
+      "disconnected": "Updates paused"
+    },
+    "connectionHint": {
+      "connecting": "Connecting to live updates",
+      "connected": "Changes from everyone appear instantly, no refresh needed",
+      "reconnecting": "Connection lost, trying to reconnect. Saved repairs are safe",
+      "disconnected": "Live updates are paused, but anything you save is still stored. The board catches up as soon as the connection returns"
+    }
+  },
+  "toasts": {
+    "label": "Notifications",
+    "close": "Close notification"
+  },
+  "repairs": {
+    "pageTitle": {
+      "board": "Repairs",
+      "job": "{{reference}}"
+    },
+    "board": {
+      "title": "Repairs",
+      "subtitle": "Report a problem, follow its progress and see exactly what was done"
+    },
+    "actions": {
+      "report": "Report a repair",
+      "submitReport": "Submit report",
+      "startWork": "Start work",
+      "saveNote": "Save progress note",
+      "complete": "Mark as completed",
+      "clearFilters": "Clear filters"
+    },
+    "form": {
+      "required": "(required)"
+    },
+    "priority": {
+      "label": "Priority",
+      "Normal": "Normal",
+      "Urgent": "Urgent",
+      "hint": {
+        "Normal": "Can be fixed as part of routine maintenance",
+        "Urgent": "A safety risk, or needs attention today"
+      }
+    },
+    "status": {
+      "label": "Status",
+      "New": "New",
+      "InProgress": "In progress",
+      "Completed": "Completed"
+    },
+    "filters": {
+      "statusGroup": "Filter repairs by status",
+      "all": "All repairs",
+      "openCount_one": "{{count}} still open",
+      "openCount_other": "{{count}} still open",
+      "urgentCount_one": "{{count}} urgent",
+      "urgentCount_other": "{{count}} urgent",
+      "noneUrgent": "None urgent",
+      "completedToday_one": "{{count}} completed today",
+      "completedToday_other": "{{count}} completed today"
+    },
+    "toolbar": {
+      "searchLabel": "Search repairs",
+      "searchPlaceholder": "Search by ID, description, reporter or note",
+      "urgentOnly": "Urgent only",
+      "sortLabel": "Sort",
+      "sort": {
+        "newest": "Newest first",
+        "oldest": "Oldest first",
+        "urgent": "Urgent first",
+        "updated": "Recently updated"
+      }
+    },
+    "list": {
+      "sectionLabel": "Repair jobs",
+      "label": "Repair jobs",
+      "loading": "Loading repairs",
+      "loadFailed": "Couldn't load repairs",
+      "showingAll_one": "{{count}} repair",
+      "showingAll_other": "{{count}} repairs",
+      "showingFiltered_one": "Showing {{count}} of {{total}} repairs",
+      "showingFiltered_other": "Showing {{count}} of {{total}} repairs",
+      "noteCount_one": "{{count}} note",
+      "noteCount_other": "{{count}} notes"
+    },
+    "empty": {
+      "title": "No repairs reported yet",
+      "description": "When something needs fixing at Meadow House, report it here and follow it through to completion",
+      "filteredTitle": "No repairs match",
+      "filteredDescription": "Try a different search, or clear the filters to see every repair"
+    },
+    "detail": {
+      "sectionLabel": "Repair details",
+      "heading": "Repair {{reference}}",
+      "back": "All repairs",
+      "house": "House",
+      "reportedBy": "Reported by",
+      "reportedOn": "Reported on",
+      "lastUpdated": "Last updated",
+      "placeholderTitle": "Select a repair",
+      "placeholderDescription": "Choose a job from the list to see its details, progress and full history",
+      "notFoundTitle": "Repair not found",
+      "notFoundDescription": "This repair doesn't exist, or the link is wrong"
+    },
+    "stepper": {
+      "label": "Repair progress",
+      "pending": "Not yet",
+      "skipped": "Skipped"
+    },
+    "latestNote": {
+      "title": "Latest progress note"
+    },
+    "update": {
+      "title": "Update this repair",
+      "description": "Every update is saved straight away with the date and time, and earlier updates are always kept"
+    },
+    "start": {
+      "title": "Ready to start?",
+      "description": "Move this job from New to In progress when work begins",
+      "saved": "Work started at {{time}}, this repair is now In progress",
+      "failed": "Couldn't start work on this repair"
+    },
+    "note": {
+      "label": "Progress note",
+      "hint": "What has been done so far, or what happens next",
+      "placeholder": "e.g. Temporary barrier fitted",
+      "saved": "Progress note saved at {{time}} and added to the history",
+      "failed": "Couldn't save the progress note",
+      "errors": {
+        "required": "Enter a progress note before saving",
+        "whitespace": "A progress note can't be only spaces, describe the progress in words",
+        "tooLong": "Keep the progress note to 1000 characters or fewer"
+      }
+    },
+    "complete": {
+      "label": "Completion note",
+      "hint": "Explain what was done to fix it, this is needed to complete the repair",
+      "placeholder": "e.g. Fence repaired and checked",
+      "saved": "{{reference}} marked as completed",
+      "failed": "Couldn't complete this repair",
+      "errors": {
+        "required": "Enter a completion note explaining what was done. The repair has not been completed",
+        "whitespace": "The completion note can't be only spaces, explain what was done in words. The repair has not been completed",
+        "tooLong": "Keep the completion note to 1000 characters or fewer"
+      }
+    },
+    "completed": {
+      "title": "Repair completed",
+      "meta": "Completed {{date}} by {{name}}",
+      "noteLabel": "What was done"
+    },
+    "history": {
+      "title": "History",
+      "order": "Newest first, earlier entries are always kept",
+      "count_one": "{{count}} entry",
+      "count_other": "{{count}} entries",
+      "latest": "Latest",
+      "by": "By {{name}}",
+      "reportedBy": "Reported by {{reporter}}, logged by {{name}}",
+      "statusAfter": "Status: {{status}}",
+      "types": {
+        "Reported": "Repair reported",
+        "WorkStarted": "Work started",
+        "ProgressNote": "Progress note added",
+        "Completed": "Repair completed"
+      }
+    },
+    "report": {
+      "title": "Report a repair",
+      "description": "Describe the problem and who is reporting it. It's logged for Meadow House as a New job",
+      "house": "House:",
+      "houseAutomatic": "Added automatically",
+      "descriptionLabel": "Description",
+      "descriptionHint": "What's wrong and where? For example, garden fence damaged near the back gate",
+      "descriptionPlaceholder": "e.g. Garden fence damaged",
+      "reporterLabel": "Reporter name",
+      "reporterHint": "The person reporting this repair",
+      "reporterPlaceholder": "e.g. Alex Morgan",
+      "fixErrors_one": "Please fix 1 problem below. Nothing was submitted, and your other answers have been kept",
+      "fixErrors_other": "Please fix {{count}} problems below. Nothing was submitted, and your other answers have been kept",
+      "failed": "Couldn't submit the report",
+      "created": "Repair {{reference}} reported. It's been added to the board as a New job",
+      "errors": {
+        "description": {
+          "required": "Enter a description of the repair",
+          "whitespace": "The description can't be only spaces, describe the repair in words",
+          "tooLong": "Keep the description to 1000 characters or fewer"
+        },
+        "reporterName": {
+          "required": "Enter the name of the person reporting the repair",
+          "whitespace": "The reporter name can't be only spaces, enter a name",
+          "tooLong": "Keep the reporter name to 100 characters or fewer"
+        }
+      }
+    },
+    "realtime": {
+      "Reported": "{{name}} reported {{reference}}",
+      "ReportedUrgent": "{{name}} reported an urgent repair, {{reference}}",
+      "WorkStarted": "{{name}} started work on {{reference}}",
+      "ProgressNote": "{{name}} added a note to {{reference}}",
+      "Completed": "{{name}} completed {{reference}}",
+      "view": "View"
+    }
   },
   "errors": {
     "somethingWentWrong": "Something went wrong",
     "sessionExpired": "Session expired",
-    "externalSignInFailed": "External sign in failed",
-    "externalSignUpFailed": "External sign up failed",
-    "signInFailed": "Sign in failed",
-    "signUpFailed": "Sign up failed",
-    "unableToStart2fa": "Unable to start two-factor authentication",
-    "passkeyAuthCancelled": "Passkey authentication cancelled",
-    "passkeySignInFailed": "Passkey sign in failed",
-    "passkeyVerificationFailed": "Passkey verification failed",
-    "invalidCode": "Invalid code",
-    "incorrectPassword": "Incorrect password",
-    "verificationFailed": "Verification failed",
-    "failedToChangePassword": "Failed to change password",
-    "failedToStartTotpSetup": "Failed to start TOTP setup",
-    "invalidCodeTryAgain": "Invalid code, please try again",
-    "failedToDisable2fa": "Failed to disable 2FA",
     "failedToUpdateProfile": "Failed to update profile",
     "failedToUploadProfilePicture": "Failed to upload profile picture",
-    "failedToSetProfilePictureUrl": "Failed to set profile picture URL",
-    "failedToDeleteProfilePicture": "Failed to delete profile picture",
-    "failedToRegisterPasskey": "Failed to register passkey",
-    "failedToDeletePasskey": "Failed to delete passkey",
-    "failedToDeleteAccount": "Failed to delete account",
-    "failedToSendEmail": "Failed to send email",
-    "failedToChangeEmail": "Failed to change email"
+    "failedToSetProfilePictureUrl": "Failed to set profile picture URL"
   },
   "backendMessages": {
     "pong": "Pong!",
@@ -107,54 +324,35 @@
     "cannotModifyDefaultGroupMembers": "Cannot manually modify members of the default group",
     "cannotDeleteDefaultGroup": "The default group cannot be deleted",
     "userAlreadyInGroup": "User is already in this group",
-    "insufficientPermissions": "Insufficient permissions"
+    "insufficientPermissions": "Insufficient permissions",
+    "demoAccountCreationFailed": "Couldn't create a demo account, please try again",
+    "repairDescriptionRequired": "Enter a description of the repair",
+    "repairDescriptionTooLong": "Keep the description to 1000 characters or fewer",
+    "repairReporterRequired": "Enter the name of the person reporting the repair",
+    "repairReporterTooLong": "Keep the reporter name to 100 characters or fewer",
+    "repairPriorityInvalid": "Choose Normal or Urgent priority",
+    "repairNoteRequired": "Enter a progress note before saving",
+    "repairCompletionNoteRequired": "Enter a completion note explaining what was done",
+    "repairNoteTooLong": "Keep the note to 1000 characters or fewer",
+    "repairJobNotFound": "This repair couldn't be found",
+    "repairJobAlreadyStarted": "Work has already started on this repair",
+    "repairJobAlreadyCompleted": "This repair has already been completed",
+    "repairJobChangedConcurrently": "Someone else updated this repair at the same moment, check the latest details and try again"
   },
   "success": {
-    "profileUpdated": "Profile updated",
-    "totpEnabled": "Two-factor authentication enabled",
-    "totpDisabled": "Two-factor authentication disabled",
-    "passkeyRegistered": "Passkey registered",
-    "emailVerified": "Email verified",
-    "emailChanged": "Email changed"
-  },
-  "auth": {
-    "signInHeading": "Sign In",
-    "signUpHeading": "Sign Up",
-    "emailPlaceholder": "you@example.com",
-    "dontHaveAccount": "Don't have an account?",
-    "alreadyHaveAccount": "Already have an account?",
-    "usePasskey": "Use a Passkey",
-    "signInWith": "Sign in with {{provider}}",
-    "signUpWith": "Sign up with {{provider}}",
-    "forgotPassword": "Forgot password?"
-  },
-  "twoFactor": {
-    "authenticatorCode": "Authenticator Code"
-  },
-  "securityCheckpoint": {
-    "heading": "Security Checkpoint",
-    "description": "Verify it's you to continue",
-    "enterPassword": "Enter your password",
-    "useAuthenticatorApp": "Use your authenticator app",
-    "usePasskey": "Use a passkey"
-  },
-  "changePassword": {
-    "dialogTitle": "Set Password",
-    "currentPassword": "Current Password",
-    "newPassword": "New Password",
-    "setAPassword": "Set a Password",
-    "changePassword": "Change Password",
-    "setPassword": "Set Password",
-    "externalAccountHint": "Your account was created via an external service. Set a password to protect your account"
+    "profileUpdated": "Profile updated"
   },
   "settings": {
     "heading": "Settings",
-    "description": "Manage your account preferences"
+    "description": "Manage your profile and how the app looks"
   },
   "profile": {
     "heading": "Profile",
-    "displayName": "Display Name",
-    "saveProfile": "Save Profile"
+    "description": "How you appear to others on the board and in repair history",
+    "displayName": "Display name",
+    "displayNameHint": "Your name is shown on the updates you make and to others who are online",
+    "displayNameRequired": "Enter a display name",
+    "saveProfile": "Save profile"
   },
   "profilePicture": {
     "dialogTitle": "Profile Picture",
@@ -163,100 +361,23 @@
     "uploadHint": "Click to upload, or paste an image from clipboard",
     "imageUrl": "Image URL",
     "urlPlaceholder": "https://example.com/photo.jpg",
-    "setUrl": "Set URL"
+    "setUrl": "Set URL",
+    "edit": "Change profile picture"
   },
-  "security": {
-    "heading": "Security",
-    "passwordLabel": "Password",
-    "passwordHidden": "**********",
-    "passwordNotSet": "-",
-    "changePassword": "Change Password",
-    "setPassword": "Set Password",
-    "twoFactorAuth": "Two-Factor Authentication",
-    "twoFactorDescription": "Use an authenticator app for extra security",
-    "setup2fa": "Set up 2FA",
-    "disable2fa": "Disable 2FA",
-    "scanQrCode": "Scan this QR code with your authenticator app:",
-    "manualKey": "Or enter this key manually:",
-    "verificationCode": "Verification Code",
-    "verificationCodePlaceholder": "000000",
-    "enable2fa": "Enable 2FA"
-  },
-  "passkeys": {
-    "heading": "Passkeys",
-    "description": "Passkeys let you sign in securely using your fingerprint, face, or device PIN",
-    "added": "Added {{date}}",
-    "passkeyName": "Passkey Name",
-    "passkeyNamePlaceholder": "e.g. \"iCloud Keychain\""
-  },
-  "data": {
-    "heading": "My Data",
-    "description": "Permanently delete your account and all associated data",
-    "deleteAccount": "Delete Account"
+  "appearance": {
+    "heading": "Appearance",
+    "description": "Choose a light or dark theme, or follow your device"
   },
   "theme": {
-    "label": "Theme:",
+    "label": "Theme",
     "light": "Light",
     "system": "System",
     "dark": "Dark"
-  },
-  "landing": {
-    "heading": "Landing Page",
-    "pinging": "Pinging server...",
-    "goToDashboard": "Go to Dashboard"
-  },
-  "home": {
-    "heading": "Dashboard Home"
   },
   "sidebar": {
     "title": "Sidebar",
     "description": "Displays the mobile sidebar",
     "toggleSidebar": "Toggle Sidebar"
-  },
-  "forgotPassword": {
-    "heading": "Forgot Password",
-    "description": "Enter your email and we'll send you a code to reset your password",
-    "sendCode": "Send Reset Code",
-    "rememberPassword": "Remember your password?",
-    "codeSent": "Reset code sent"
-  },
-  "resetPassword": {
-    "heading": "Reset Password",
-    "description": "Enter the code sent to your email and your new password",
-    "code": "Reset Code",
-    "codePlaceholder": "000000",
-    "newPassword": "New Password",
-    "resetPassword": "Reset Password",
-    "resendCode": "Resend Code",
-    "successHeading": "Password Reset",
-    "successDescription": "Your password has been reset successfully, you can now sign in with your new password"
-  },
-  "verifyEmail": {
-    "heading": "Verify Your Email",
-    "description": "Verify your email address to secure your account",
-    "sendCode": "Send Verification Code",
-    "codeSentTo": "A verification code has been sent to {{email}}",
-    "code": "Verification Code",
-    "codePlaceholder": "000000",
-    "verify": "Verify",
-    "resendCode": "Resend Code",
-    "codeSent": "Verification code sent",
-    "banner": "Your email is not verified",
-    "notVerified": "Your email is not verified",
-    "verified": "Email verified",
-    "verifyNow": "Verify now"
-  },
-  "changeEmail": {
-    "dialogTitle": "Change Email",
-    "description": "Enter your new email address, a verification code will be sent to confirm the change",
-    "newEmail": "New Email",
-    "sendCode": "Send Verification Code",
-    "code": "Verification Code",
-    "codePlaceholder": "000000",
-    "codeSentTo": "A verification code has been sent to {{email}}",
-    "confirm": "Confirm Change",
-    "resendCode": "Resend Code",
-    "changeEmail": "Change Email"
   },
   "permissions": {
     "heading": "Permissions",

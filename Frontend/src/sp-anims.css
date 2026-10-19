@@ -46,6 +46,46 @@ https://github.com/SamarthMP
   animation: sp-scale-in 400ms var(--sp-ease-md) forwards;
 }
 
+@keyframes sp-rise-in {
+  0% {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes sp-flash {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--ring) 70%, transparent);
+    background-color: color-mix(in oklab, var(--primary) 14%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 10px transparent;
+    background-color: transparent;
+  }
+}
+
+.sp-rise-in {
+  animation: sp-rise-in 450ms var(--sp-ease-md) both;
+}
+
+.sp-flash {
+  animation: sp-flash 1600ms var(--sp-ease-lg) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sp-scale-in,
+  .sp-slide-in,
+  .sp-page-anim,
+  .sp-rise-in,
+  .sp-flash {
+    animation: none;
+  }
+}
+
 
 .ease-sp-md {
   animation-timing-function: var(--sp-ease-md);

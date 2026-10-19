@@ -62,6 +62,12 @@ namespace Backend.Helpers
                 return BackendMessageKeys.ValidationFailed;
             }
 
+            // Validation attributes may declare a message key directly via ErrorMessage
+            if (errorMessage.StartsWith("backendMessages.", StringComparison.Ordinal))
+            {
+                return errorMessage;
+            }
+
             if (errorMessage.Contains(" is required", StringComparison.OrdinalIgnoreCase))
             {
                 return BackendMessageKeys.FieldRequired;

@@ -1,3 +1,4 @@
+import AppBrand from "@/components/brand/app-brand";
 import {
     Sidebar,
     SidebarContent,
@@ -6,39 +7,39 @@ import {
     SidebarGroupContent,
     SidebarGroupLabel,
     SidebarHeader,
-    SidebarMenuItem
+    SidebarMenu,
+    SidebarMenuItem,
+    useSidebar
 } from "@/components/ui/sidebar";
 import { useAuth } from "@/hooks/use-auth";
 import routes from "@/lib/routes";
 import { cn } from "@/lib/utils";
-import { IconHome, IconSettings, IconShieldLock } from "@tabler/icons-react";
-import { t } from "i18next";
+import { IconSettings, IconShieldLock, IconTool } from "@tabler/icons-react";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router";
+import { Avatar } from "./ui/avatar";
 
 interface SidebarItem {
     name: string;
     href?: string;
+    // Extra path prefixes that should also mark this item as active
+    activePrefixes?: string[];
     children?: SidebarItem[];
     icon?: React.ComponentType<{ className?: string }>;
 }
 
 const baseSections: SidebarItem[] = [
     {
-        name: "common.home",
+        name: "nav.repairs",
         href: routes.MAIN,
-        icon: IconHome
+        activePrefixes: [routes.JOBS],
+        icon: IconTool
     },
     {
         name: "common.settings",
-        children: [
-            {
-                name: "common.settings",
-                href: routes.SETTINGS,
-                icon: IconSettings
-            }
-        ]
+        href: routes.SETTINGS,
+        icon: IconSettings
     }
 ];
 
@@ -65,58 +66,68 @@ export function AppSidebar() {
 
     return (
         <Sidebar>
-            <SidebarHeader >
-                {/* TODO: Replace logo/app name here */}
-                <div className="h-14 flex items-center justify-center gap-3">
-                    <img alt="SamarthMP GitHub PFP" className="w-12 h-12 rounded-full" src="https://avatars.githubusercontent.com/u/79756986?v=4" />
-                    <a href="https://github.com/SamarthMP" target="_blank" className="font-bold text-lg">Samarth's Stack</a>
-                </div>
+            <SidebarHeader className="h-16 justify-center border-b border-sidebar-border px-4">
+                <Link to={routes.MAIN} className="rounded-md outline-none focus-visible:ring-[3px] focus-visible:ring-ring">
+                    <AppBrand />
+                </Link>
             </SidebarHeader>
-            <SidebarContent>
-                {sections.map((section) => {
+            <SidebarContent className="pt-3">
+                <nav aria-label={t("nav.label")}>
+                    <SidebarMenu className="gap-1">
+                        {sections.filter((section) => !section.children).map((section) => (
+                            <SidebarLink key={section.name} {...section} />
+                        ))}
+                    </SidebarMenu>
 
-                    // Plain link without children
-                    if (!section.children) {
-                        return <SidebarLink key={section.name} {...section} />;
-                    }
-
-                    // Section with children
-                    return (
+                    {sections.filter((section) => section.children).map((section) => (
                         <SidebarGroup key={section.name} id={section.name}>
                             <SidebarGroupLabel>{t(section.name)}</SidebarGroupLabel>
                             <SidebarGroupContent>
-                                {section.children.map((child) => (
-                                    <SidebarLink isGrouped key={child.name} {...child} />
-                                ))}
+                                <SidebarMenu className="gap-1">
+                                    {section.children!.map((child) => (
+                                        <SidebarLink isGrouped key={child.name} {...child} />
+                                    ))}
+                                </SidebarMenu>
                             </SidebarGroupContent>
                         </SidebarGroup>
-                    );
-                })}
+                    ))}
+                </nav>
             </SidebarContent>
-            <SidebarFooter className="border-t border-border">
+            <SidebarFooter className="border-t border-sidebar-border p-3">
+                <div className="flex items-center gap-3 rounded-lg p-2">
+                    <Avatar user={user} className="size-9" />
+                    <div className="min-w-0">
+                        <p className="truncate text-sm font-semibold">{user?.displayName}</p>
+                        <p className="truncate text-sm text-muted-foreground">{t("userMenu.demoSession")}</p>
+                    </div>
+                </div>
             </SidebarFooter>
         </Sidebar>
     );
 }
 
-function SidebarLink({ name, href, icon: Icon, isGrouped }: SidebarItem & { isGrouped?: boolean }) {
-
+function SidebarLink({ name, href, activePrefixes, icon: Icon, isGrouped }: SidebarItem & { isGrouped?: boolean }) {
     const location = useLocation();
-    const isActive = location.pathname === href;
+    const { t } = useTranslation();
+    const { isMobile, setOpenMobile } = useSidebar();
+    const isActive = location.pathname === href
+        || (activePrefixes ?? []).some((prefix) => location.pathname.startsWith(prefix));
 
     return (
-        <SidebarMenuItem key={name} className="relative">
-            <Link className={cn(
-                "h-10 flex items-center gap-2 pl-4 pr-4 rounded-lg",
-                "transition-all ease-sp-md duration-300 hover:bg-primary/10",
-                isActive && "bg-primary/20! pl-5",
-                isGrouped ? "mx-2" : "mx-4"
-            )} to={href!}>
-                {Icon && <Icon className="w-5 h-5" />}
-
-                <span className={cn("text-sm", isActive && "font-medium")}>
-                    {t(name)}
-                </span>
+        <SidebarMenuItem>
+            <Link
+                to={href!}
+                aria-current={isActive ? "page" : undefined}
+                onClick={() => isMobile && setOpenMobile(false)}
+                className={cn(
+                    "flex h-10 items-center gap-2.5 rounded-lg px-4 text-sm outline-none",
+                    "transition-all ease-sp-md duration-300 hover:bg-sidebar-accent focus-visible:ring-[3px] focus-visible:ring-ring",
+                    isActive && "bg-sidebar-accent pl-5 font-semibold text-sidebar-accent-foreground",
+                    isGrouped ? "mx-0" : "mx-3"
+                )}
+            >
+                {Icon && <Icon className={cn("size-5", isActive && "text-primary")} />}
+                {t(name)}
             </Link>
         </SidebarMenuItem>
     );

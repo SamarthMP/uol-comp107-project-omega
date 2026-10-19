@@ -176,6 +176,8 @@ function Sidebar({
 }) {
     const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
     const { t } = useTranslation();
+    // The mobile sheet is opened from SidebarTrigger rather than a SheetTrigger, so focus is returned manually
+    const returnFocusRef = React.useRef<HTMLElement | null>(null);
 
     if (collapsible === "none") {
         return (
@@ -206,6 +208,13 @@ function Sidebar({
             } as React.CSSProperties
                     }
                     side={side}
+                    onOpenAutoFocus={() => {
+                        returnFocusRef.current = document.activeElement as HTMLElement | null;
+                    }}
+                    onCloseAutoFocus={(event) => {
+                        event.preventDefault();
+                        returnFocusRef.current?.focus();
+                    }}
                 >
                     <SheetHeader className="sr-only">
                         <SheetTitle>{t("sidebar.title")}</SheetTitle>

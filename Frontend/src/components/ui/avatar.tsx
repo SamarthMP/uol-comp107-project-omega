@@ -22,7 +22,7 @@ function Avatar({
     user?: AvatarUser | undefined | null,
 }) {
 
-    const pfpUrl = resolveUrl(user?.profilePictureUrl || "");
+    const pfpUrl = user?.profilePictureUrl ? resolveUrl(user.profilePictureUrl) : null;
 
     const initials = (user?.displayName || user?.email || "UU")
         .split(/[\s@]/)
@@ -41,7 +41,7 @@ function Avatar({
             )}
             {...props}
         >
-            {pfpUrl && <AvatarImage src={pfpUrl} alt={user?.displayName ?? "Avatar"} />}
+            {pfpUrl && <AvatarImage src={pfpUrl} alt={user?.displayName ?? ""} />}
             <AvatarFallback>{initials}</AvatarFallback>
             {children}
         </AvatarPrimitive.Root>

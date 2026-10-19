@@ -1,9 +1,16 @@
-export default function AppPage({ children, className }: { children: React.ReactNode, className?: string }) {
+import { cn } from "@/lib/utils";
+import type { Ref } from "react";
+
+interface AppPageProps {
+    children: React.ReactNode;
+    className?: string;
+    ref?: Ref<HTMLDivElement>;
+}
+
+export default function AppPage({ children, className, ref }: AppPageProps) {
     return (
-        <>
-            <div className={`flex w-full h-full flex-col mt-14 pb-22 p-8 overflow-y-auto sp-page-anim ${className}`}>
-                {children}
-            </div>
-        </>
+        <div ref={ref} className={cn("flex h-full w-full flex-col overflow-y-auto p-4 pb-10 sm:p-6 lg:p-8 sp-page-anim", className)}>
+            {children}
+        </div>
     );
 }

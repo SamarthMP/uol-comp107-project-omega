@@ -25,3 +25,5 @@ export default function useStatusTracker(initialStatus: StatusType = "unknown", 
         clear,
     };
 }
+
+export type StatusTracker = ReturnType<typeof useStatusTracker>;

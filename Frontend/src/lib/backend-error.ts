@@ -6,14 +6,16 @@ export type BackendErrorLike = {
     errors?: Record<string, string[]>;
 };
 
+// Translates server message keys (e.g. "backendMessages.repairJobNotFound").
+// Anything else is assumed to be display text already and is returned untouched,
+// so translated UI strings containing ":" or "." are never mistaken for keys.
 export function translateBackendMessage(message: string): string {
-    if (!message) {
+    if (!message || !message.startsWith("backendMessages.")) {
         return message;
     }
 
-    const key = message.startsWith("backendMessages.") ? message : `backendMessages.${message}`;
-    const translated = i18n.t(key);
-    if (translated !== key) {
+    const translated = i18n.t(message);
+    if (translated !== message) {
         return translated;
     }
 
@@ -41,5 +43,7 @@ export function getBackendErrorMessage(error: BackendErrorLike | null | undefine
         return validationErrors.join(" ");
     }
 
-    return error?.error_description ?? error?.error ?? fallback;
+    // Only server message keys are shown; raw status text or empty bodies use the caller's translated fallback
+    const messageKey = [error?.error_description, error?.error].find((message) => message?.startsWith("backendMessages."));
+    return messageKey ? translateBackendMessage(messageKey) : fallback;
 }

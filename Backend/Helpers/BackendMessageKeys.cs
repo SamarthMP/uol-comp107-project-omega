@@ -62,5 +62,18 @@ namespace Backend.Helpers
         public const string CannotDeleteDefaultGroup = "backendMessages.cannotDeleteDefaultGroup";
         public const string UserAlreadyInGroup = "backendMessages.userAlreadyInGroup";
         public const string InsufficientPermissions = "backendMessages.insufficientPermissions";
+        public const string DemoAccountCreationFailed = "backendMessages.demoAccountCreationFailed";
+        public const string RepairDescriptionRequired = "backendMessages.repairDescriptionRequired";
+        public const string RepairDescriptionTooLong = "backendMessages.repairDescriptionTooLong";
+        public const string RepairReporterRequired = "backendMessages.repairReporterRequired";
+        public const string RepairReporterTooLong = "backendMessages.repairReporterTooLong";
+        public const string RepairPriorityInvalid = "backendMessages.repairPriorityInvalid";
+        public const string RepairNoteRequired = "backendMessages.repairNoteRequired";
+        public const string RepairCompletionNoteRequired = "backendMessages.repairCompletionNoteRequired";
+        public const string RepairNoteTooLong = "backendMessages.repairNoteTooLong";
+        public const string RepairJobNotFound = "backendMessages.repairJobNotFound";
+        public const string RepairJobAlreadyStarted = "backendMessages.repairJobAlreadyStarted";
+        public const string RepairJobAlreadyCompleted = "backendMessages.repairJobAlreadyCompleted";
+        public const string RepairJobChangedConcurrently = "backendMessages.repairJobChangedConcurrently";
     }
 }

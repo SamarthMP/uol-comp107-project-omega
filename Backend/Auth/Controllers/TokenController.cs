@@ -67,6 +67,9 @@ namespace Backend.Auth.Controllers
             if (request.GrantType == "urn:custom:2fa")
                 return await HandleTwoFactorGrant(request);
 
+            if (request.GrantType == DemoAccounts.GrantType)
+                return await HandleDemoGrant();
+
             return ForbidOpenIddict(Errors.UnsupportedGrantType, BackendMessageKeys.UnsupportedGrantType);
         }
 
@@ -260,6 +263,20 @@ namespace Backend.Auth.Controllers
             }
 
             return ForbidOpenIddict(Errors.InvalidGrant, BackendMessageKeys.VerificationFailed);
+        }
+
+        /// <summary>
+        /// Creates a fresh passwordless "Demo User NNNN" account and signs it in.
+        /// </summary>
+        private async Task<IActionResult> HandleDemoGrant()
+        {
+            var user = DemoAccounts.CreateUser();
+
+            var result = await UserManager.CreateAsync(user);
+            if (!result.Succeeded)
+                return ForbidOpenIddict(Errors.ServerError, BackendMessageKeys.DemoAccountCreationFailed);
+
+            return SignIn(await CreatePrincipalAsync(user), OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
         }
 
         #endregion

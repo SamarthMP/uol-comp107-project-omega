@@ -11,11 +11,11 @@
 
     <ItemGroup>
         <PackageReference Include="DotNetEnv" Version="3.1.1" />
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.4" />
-        <PackageReference Include="Microsoft.Bcl.Memory" Version="10.0.5" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.5" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.5" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.5">
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.13" />
+        <PackageReference Include="Microsoft.Bcl.Memory" Version="10.0.13" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.13" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.13" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.13">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
@@ -24,7 +24,7 @@
 	    <!-- Auth -->
 	    <PackageReference Include="OpenIddict.AspNetCore" Version="7.3.0" />
 	    <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="7.3.0" />
-	    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.5" />
+	    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.13" />
 
         <!-- Passkeys (FIDO2/WebAuthn) -->
         <PackageReference Include="Fido2.AspNet" Version="4.0.0" />
@@ -41,8 +41,8 @@
 	</ItemGroup>
 
 
-	<!-- Builds Frontend -->
-    <Target Name="Prebuild" BeforeTargets="Build">
+	<!-- Builds Frontend (pass -p:SkipFrontendBuild=true to skip, e.g. when running backend tests) -->
+    <Target Name="Prebuild" BeforeTargets="Build" Condition="'$(SkipFrontendBuild)' != 'true'">
 	    <Exec Command="node ../Frontend/prebuild.js" />
     </Target>
 

@@ -1,4 +1,3 @@
-import ChangeEmailDialog from "@/components/auth/change-email-dialog";
 import ProfilePictureEditor from "@/components/settings/profile-picture-editor";
 import { Avatar, AvatarBadge } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -6,88 +5,62 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/use-auth";
-import { useEmailFeature } from "@/hooks/use-email-feature";
+import { useRealtime } from "@/hooks/use-realtime";
 import {
-    deleteProfilePicture,
     setProfilePictureUrl,
     updateProfile,
     uploadProfilePicture,
 } from "@/lib/auth-client";
-import routes from "@/lib/routes";
 import useStatusTracker from "@/lib/use-status.tracker";
-import { IconAlertTriangle, IconCircleCheck, IconPencil } from "@tabler/icons-react";
-import { useState } from "react";
+import { IconPencil } from "@tabler/icons-react";
+import { useState, type FormEvent } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router";
 import { Spinner } from "../ui/spinner";
 import StatusMessage from "../ui/status-message";
 
-interface ProfileSectionProps {
-    onRequireSudo: (action: () => void) => void;
-}
+const DISPLAY_NAME_MAX_LENGTH = 128;
 
-export default function ProfileSection({ onRequireSudo }: ProfileSectionProps) {
+export default function ProfileSection() {
     const { user, refreshUser } = useAuth();
+    const { refreshProfile } = useRealtime();
     const { t } = useTranslation();
-    const { emailEnabled } = useEmailFeature();
 
     const [pendingDisplayName, setPendingDisplayName] = useState<string | null>(null);
     const [pfpEditorOpen, setPfpEditorOpen] = useState(false);
-    const [changeEmailOpen, setChangeEmailOpen] = useState(false);
 
     const displayName = pendingDisplayName ?? user?.displayName ?? "";
-    const isDirty = pendingDisplayName !== null && pendingDisplayName !== (user?.displayName ?? "");
+    const isDirty = pendingDisplayName !== null && pendingDisplayName.trim() !== (user?.displayName ?? "");
     const status = useStatusTracker();
 
-    async function handleProfileSave() {
+    // Saves a profile change, then lets everyone else on the board see the new name or picture
+    async function applyChange(change: () => Promise<unknown>, failureKey: string) {
         status.setStatus("loading");
         try {
-            await updateProfile(displayName);
+            await change();
             await refreshUser();
-            setPendingDisplayName(null);
+            refreshProfile();
             status.setStatus("success", t("success.profileUpdated"));
+            return true;
         } catch {
-            status.setStatus("error", t("errors.failedToUpdateProfile"));
+            status.setStatus("error", t(failureKey));
+            return false;
+        }
+    }
+
+    async function handleProfileSave(event: FormEvent) {
+        event.preventDefault();
+        if (!displayName.trim()) {
+            status.setStatus("error", t("profile.displayNameRequired"));
+            return;
+        }
+        if (await applyChange(() => updateProfile(displayName.trim()), "errors.failedToUpdateProfile")) {
+            setPendingDisplayName(null);
         }
     }
 
     async function handlePfpUpload(blob: Blob) {
-        status.setStatus("loading");
-        try {
-            await uploadProfilePicture(blob);
-            await refreshUser();
+        if (await applyChange(() => uploadProfilePicture(blob), "errors.failedToUploadProfilePicture")) {
             setPfpEditorOpen(false);
-            status.setStatus("success", t("success.profileUpdated"));
-        } catch {
-            status.setStatus("error", t("errors.failedToUploadProfilePicture"));
-        }
-    }
-
-    async function handlePfpUrl(url: string) {
-        status.setStatus("loading");
-        try {
-            await setProfilePictureUrl(url);
-            await refreshUser();
-            status.setStatus("success", t("success.profileUpdated"));
-        } catch {
-            status.setStatus("error", t("errors.failedToSetProfilePictureUrl"));
-        }
-    }
-
-    async function handleChangeEmail() {
-        onRequireSudo(async () => {
-            setChangeEmailOpen(true);
-        });
-    }
-
-    async function handlePfpDelete() {
-        status.setStatus("loading");
-        try {
-            await deleteProfilePicture();
-            await refreshUser();
-            status.setStatus("success", t("success.profileUpdated"));
-        } catch {
-            status.setStatus("error", t("errors.failedToDeleteProfilePicture"));
         }
     }
 
@@ -95,82 +68,50 @@ export default function ProfileSection({ onRequireSudo }: ProfileSectionProps) {
 
     return (
         <>
-            <Card>
-                <h6>{t("profile.heading")}</h6>
-                <div className="flex items-center gap-4">
-                    <Avatar
-                        user={user}
-                        size="lg"
-                        className="h-16 w-16 cursor-pointer"
-                        key={`pfp-nonce-${pfpEditorOpen}`}
+            <Card className="gap-4 p-5 sm:p-6">
+                <div>
+                    <h2 className="text-lg font-semibold">{t("profile.heading")}</h2>
+                    <p className="text-sm text-muted-foreground">{t("profile.description")}</p>
+                </div>
+                <form onSubmit={handleProfileSave} className="flex flex-col gap-4 sm:flex-row sm:items-end">
+                    <Button
+                        type="button"
+                        variant="ghost"
+                        className="size-auto self-start rounded-full p-0"
+                        aria-label={t("profilePicture.edit")}
                         onClick={() => setPfpEditorOpen(true)}
                     >
-                        <AvatarBadge>
-                            <IconPencil onClick={() => setPfpEditorOpen(true)} />
-                        </AvatarBadge>
-                    </Avatar>
-                    <div className="space-y-2 w-full">
+                        <Avatar user={user} size="lg" className="size-16" key={`pfp-nonce-${pfpEditorOpen}`}>
+                            <AvatarBadge>
+                                <IconPencil />
+                            </AvatarBadge>
+                        </Avatar>
+                    </Button>
+                    <div className="flex w-full flex-col gap-2">
                         <Label htmlFor="displayName">{t("profile.displayName")}</Label>
                         <Input
                             id="displayName"
                             value={displayName}
+                            maxLength={DISPLAY_NAME_MAX_LENGTH}
+                            autoComplete="name"
                             onChange={(e) => setPendingDisplayName(e.target.value)}
                         />
                     </div>
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor="email">{t("common.email")}</Label>
-                    <div className="flex gap-2">
-                        <Input id="email" value={user.email} disabled className="flex-1" />
-                        {emailEnabled && (
-                            <Button variant="outline" onClick={handleChangeEmail}>
-                                {t("changeEmail.changeEmail")}
-                            </Button>
-                        )}
-                    </div>
-                    {emailEnabled && !user.isEmailVerified && (
-                        <div className="flex items-center gap-2 text-sm text-destructive">
-                            <IconAlertTriangle className="h-4 w-4 shrink-0" />
-                            <span>{t("verifyEmail.notVerified")}</span>
-                            <Link to={routes.VERIFY_EMAIL} className="underline font-medium">
-                                {t("verifyEmail.verifyNow")}
-                            </Link>
-                        </div>
-                    )}
-                    {emailEnabled && user.isEmailVerified && (
-                        <div className="flex items-center gap-2 text-sm text-primary">
-                            <IconCircleCheck className="h-4 w-4 shrink-0" />
-                            <span>{t("verifyEmail.verified")}</span>
-                        </div>
-                    )}
-                </div>
+                    <Button type="submit" disabled={!isDirty || status.loading} className="sm:w-auto">
+                        {status.loading ? <Spinner /> : t("profile.saveProfile")}
+                    </Button>
+                </form>
+                <p className="text-sm text-muted-foreground">{t("profile.displayNameHint")}</p>
 
                 <StatusMessage {...status} />
-                
-                {
-                    isDirty && (
-                        <Button onClick={handleProfileSave} disabled={status.loading}>
-                            {status.loading ? <Spinner /> : t("profile.saveProfile")}
-                        </Button>
-                    )
-                }
-
-
             </Card>
 
             <ProfilePictureEditor
                 open={pfpEditorOpen}
                 onClose={() => setPfpEditorOpen(false)}
                 onSave={handlePfpUpload}
-                onSetUrl={handlePfpUrl}
+                onSetUrl={(url) => void applyChange(() => setProfilePictureUrl(url), "errors.failedToSetProfilePictureUrl")}
             />
-
-            {emailEnabled && (
-                <ChangeEmailDialog
-                    open={changeEmailOpen}
-                    onClose={() => setChangeEmailOpen(false)}
-                />
-            )}
         </>
     );
 }

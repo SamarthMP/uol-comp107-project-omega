@@ -1,82 +1,51 @@
+import AppLogo from "@/components/brand/app-logo";
+import ConnectionIndicator from "@/components/presence/connection-indicator";
+import OnlineUsers from "@/components/presence/online-users";
 import { useAuth } from "@/hooks/use-auth";
 import routes from "@/lib/routes";
-import { IconLogout, IconSettings, IconUserPlus } from "@tabler/icons-react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
-import ThemeSwitcher from "./settings/theme-switcher";
+import UserMenu from "./user-menu";
 import { Avatar } from "./ui/avatar";
 import { Button } from "./ui/button";
-import { LargePopover, LargePopoverContent, LargePopoverTrigger } from "./ui/large-popover";
-import { Separator } from "./ui/separator";
+import { LargePopover, LargePopoverContent, LargePopoverDescription, LargePopoverHeader, LargePopoverTitle, LargePopoverTrigger } from "./ui/large-popover";
 import { SidebarTrigger } from "./ui/sidebar";
 
 export default function TopBar() {
     const { user } = useAuth();
-
-    return (
-        <div className="w-full h-14 flex items-center px-3 z-10">
-            <SidebarTrigger />    
-            <TopBarPopover>
-                <Avatar user={user} className="ml-auto cursor-pointer w-10 h-10"/>
-            </TopBarPopover>
-        </div>
-    );
-}
-
-function TopBarPopover({ children }: { children: React.ReactNode }) {
-
-    const { user, signOut } = useAuth();
     const { t } = useTranslation();
+    const [menuOpen, setMenuOpen] = useState(false);
 
     return (
-        <LargePopover>
-            <LargePopoverTrigger asChild>
-                {children}
-            </LargePopoverTrigger>
-            <LargePopoverContent className="m-2 gap-2" align="end">
-                <UserPopover />
-                <Separator className="my-0 py-0" />
-                <div className="flex flex-col gap-1">
-                    <ThemeSwitcher />
-                    <Link to={routes.SETTINGS}>
-                        <Button className="w-full" variant="outline"><IconSettings />{t("common.settings")}</Button>
-                    </Link>
-                </div>
-            </LargePopoverContent>
-        </LargePopover>
-    );
-}
+        <header className="z-10 flex h-14 shrink-0 items-center gap-2 border-b bg-background/85 px-3 backdrop-blur sm:px-4">
+            <SidebarTrigger />
+            <Link
+                to={routes.MAIN}
+                className="flex items-center gap-2 rounded-md font-semibold outline-none focus-visible:ring-[3px] focus-visible:ring-ring md:hidden"
+            >
+                <AppLogo className="size-8" />
+                <span className="sr-only sm:not-sr-only">{t("brand.houseName")}</span>
+            </Link>
 
-function UserPopover() {
-    const { user, signOut } = useAuth();
-    const { t } = useTranslation();
-
-    // Fallback sign in button if user is not authenticated
-    if (!user || !user.id) {
-        return (
-            <div className="flex flex-grow items-center w-full">
-                <Link className="w-full" to={routes.SIGN_IN}>
-                    <Button className="w-full" variant="outline"><IconUserPlus /> {t("common.signIn")}</Button>
-                </Link>
+            <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
+                <ConnectionIndicator />
+                <OnlineUsers />
+                <LargePopover open={menuOpen} onOpenChange={setMenuOpen}>
+                    <LargePopoverTrigger asChild>
+                        <Button variant="ghost" size="icon" className="size-10" aria-label={t("userMenu.open", { name: user?.displayName ?? "" })}>
+                            <Avatar user={user} className="size-9" />
+                        </Button>
+                    </LargePopoverTrigger>
+                    <LargePopoverContent className="m-2 w-80 gap-2" align="end">
+                        <LargePopoverHeader className="sr-only">
+                            <LargePopoverTitle>{t("userMenu.title")}</LargePopoverTitle>
+                            <LargePopoverDescription>{t("userMenu.description")}</LargePopoverDescription>
+                        </LargePopoverHeader>
+                        <UserMenu onNavigate={() => setMenuOpen(false)} />
+                    </LargePopoverContent>
+                </LargePopover>
             </div>
-        );
-    }
-
-    // Used to prevent showing the email twice
-    const isDisplayNameSameAsEmail = user.displayName?.toLowerCase() === user.email?.toLowerCase();
-
-    return (
-        <>
-            <div className="flex flex-col justify-center items-center py-1 gap-2">
-                {
-                    !isDisplayNameSameAsEmail && (
-                        <span className="text-sm text-muted-foreground mb-2">{user.email}</span>
-                    )
-                }
-                <Avatar user={user} className="w-20 h-20"/>
-                <span className="text-lg font-semibold">{user.displayName}</span>
-                <Button className="px-4" variant="ghost" onClick={signOut}><IconLogout />{t("common.signOut")}</Button>
-            </div>
-        </>
+        </header>
     );
 }

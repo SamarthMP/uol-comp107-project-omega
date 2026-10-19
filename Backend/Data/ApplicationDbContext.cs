@@ -1,4 +1,6 @@
 ﻿using Backend.Auth;
+using Backend.Repairs.Data;
+using Backend.Repairs.Models;
 using Backend.Storage;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +15,8 @@ namespace Backend.Data
         public DbSet<PermissionGroupFlag> PermissionGroupFlags { get; set; }
         public DbSet<PermissionGroupMember> PermissionGroupMembers { get; set; }
         public DbSet<UserFeatureFlag> UserFeatureFlags { get; set; }
+        public DbSet<RepairJob> RepairJobs { get; set; }
+        public DbSet<RepairJobHistoryEntry> RepairJobHistory { get; set; }
 
         public ApplicationDbContext(DbContextOptions options) : base(options) { }
 
@@ -61,6 +65,9 @@ namespace Backend.Data
             {
                 entity.HasIndex(e => new { e.UserId, e.Flag }).IsUnique();
             });
+
+            builder.ApplyConfiguration(new RepairJobConfiguration());
+            builder.ApplyConfiguration(new RepairJobHistoryEntryConfiguration());
         }
     }
 }

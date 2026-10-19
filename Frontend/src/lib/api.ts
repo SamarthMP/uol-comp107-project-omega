@@ -11,9 +11,10 @@ export function getApiHost() {
     
     let apiHost = "";
 
-    // In development, the frontend would be run from the backend
-    // And the backend would inject lastDebugBackendURL to the correct host and port of the backend server
-    if ((location.hostname === "localhost" || location.hostname === "127.0.0.1" || isDev) && lastDebugBackendURL) {
+    // In development, the Vite dev server runs separately from the backend,
+    // and the backend injects lastDebugBackendURL with its host and port.
+    // Production builds are served by the backend itself, so they always use the same origin.
+    if (isDev && lastDebugBackendURL) {
         apiHost = lastDebugBackendURL;
     }
 

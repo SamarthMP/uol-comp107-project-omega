@@ -5,10 +5,10 @@ import {
     getStoredToken,
     getStoredUser,
     isSessionExpiredError,
+    redirectToSignIn,
     storeUser,
 } from "@/lib/auth-client";
 import type { UserProfile } from "@/lib/auth-types";
-import routes from "@/lib/routes";
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 
 interface AuthContextValue {
@@ -49,11 +49,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
     }, []);
 
+    // Ends the current demo session; the sign in page then starts a fresh one after a full reload
     const signOut = useCallback(() => {
-        clearSession().then(() => {
+        clearSession().finally(() => {
             clearTokens();
-            setUser(null);
-            window.location.href = routes.LANDING; // Redirect to home page after logout
+            redirectToSignIn();
         });
     }, []);
 

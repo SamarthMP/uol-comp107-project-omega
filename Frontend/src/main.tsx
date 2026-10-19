@@ -1,23 +1,19 @@
+import { lazy } from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter, Route, Routes } from "react-router";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import RequireAuth from "./components/auth/require-auth";
 import { AuthProvider } from "./hooks/use-auth";
-import { EmailFeatureProvider } from "./hooks/use-email-feature";
 import useTheme from "./hooks/use-theme";
 import "./index.css";
 import "./lib/i18n";
 import routes from "./lib/routes";
-import TwoFactor from "./pages/auth/2fa";
-import ForgotPassword from "./pages/auth/forgot-password";
-import ResetPassword from "./pages/auth/reset-password";
-import SignIn from "./pages/auth/signin";
-import SignUp from "./pages/auth/signup";
-import VerifyEmail from "./pages/auth/verify-email";
-import Landing from "./pages/landing/landing";
-import Home from "./pages/spa/home";
+import DemoSession from "./pages/auth/demo-session";
 import SPALayout from "./pages/spa/layout";
-import Permissions from "./pages/spa/permissions";
-import Settings from "./pages/spa/settings";
+import RepairsPage from "./pages/spa/repairs";
+
+// Secondary pages are split out so the repairs board loads as quickly as possible
+const Settings = lazy(() => import("./pages/spa/settings"));
+const Permissions = lazy(() => import("./pages/spa/permissions"));
 
 createRoot(document.getElementById("root")!).render(
     <RootLayout />,
@@ -25,30 +21,28 @@ createRoot(document.getElementById("root")!).render(
 
 function RootLayout() {
 
-    const theme = useTheme();
+    useTheme();
 
     return (
-        <EmailFeatureProvider>
-            <AuthProvider>
-                <div className="h-screen overflow-hidden">
-                    <BrowserRouter>
-                        <Routes>
-                            <Route path="/" element={<Landing />} />
-                            <Route path={routes.SIGN_IN} element={<SignIn />} />
-                            <Route path={routes.TWO_FACTOR} element={<TwoFactor />} />
-                            <Route path={routes.SIGN_UP} element={<SignUp />} />
-                            <Route path={routes.FORGOT_PASSWORD} element={<ForgotPassword />} />
-                            <Route path={routes.RESET_PASSWORD} element={<ResetPassword />} />
-                            <Route path={routes.VERIFY_EMAIL} element={<RequireAuth><VerifyEmail /></RequireAuth>} />
-                            <Route path={routes.MAIN} element={<RequireAuth><SPALayout /></RequireAuth>}>
-                                <Route index element={<Home />} />
-                                <Route path="settings" element={<Settings />} />
-                                <Route path="permissions" element={<Permissions />} />
+        <AuthProvider>
+            <div className="h-dvh overflow-hidden">
+                <BrowserRouter>
+                    <Routes>
+                        <Route path={routes.LANDING} element={<Navigate to={routes.MAIN} replace />} />
+                        <Route path={routes.SIGN_IN} element={<DemoSession />} />
+                        <Route path={routes.SIGN_UP} element={<Navigate to={routes.SIGN_IN} replace />} />
+                        <Route path={routes.MAIN} element={<RequireAuth><SPALayout /></RequireAuth>}>
+                            <Route element={<RepairsPage />}>
+                                <Route index element={null} />
+                                <Route path="jobs/:jobId" element={null} />
                             </Route>
-                        </Routes>
-                    </BrowserRouter>
-                </div>
-            </AuthProvider>
-        </EmailFeatureProvider>
+                            <Route path="settings" element={<Settings />} />
+                            <Route path="permissions" element={<Permissions />} />
+                        </Route>
+                        <Route path="*" element={<Navigate to={routes.MAIN} replace />} />
+                    </Routes>
+                </BrowserRouter>
+            </div>
+        </AuthProvider>
     );
 }

@@ -1,12 +1,7 @@
 import { getApiHost, getApiRootEndpoint } from "./api";
 import type {
-    AuthConfigResponse,
     ErrorResponse,
-    PasskeyInfo,
-    PendingTwoFactorSession,
-    SecurityCheckpointMethod,
     TokenResponse,
-    TotpSetupResponse,
     UserProfile
 } from "./auth-types";
 import i18n from "./i18n";
@@ -15,18 +10,31 @@ import routes from "./routes";
 const TOKEN_KEY = "auth_access_token";
 const REFRESH_KEY = "auth_refresh_token";
 const EXPIRY_KEY = "auth_token_expiry";
-const PENDING_TWO_FACTOR_KEY = "auth_pending_two_factor";
 const USER_KEY = "auth_user_profile";
+const DEMO_GRANT_TYPE = "urn:custom:demo";
+
+// Sessions are scoped to the browser session: each tab/session gets its own demo account,
+// which survives page refreshes but not closing the tab.
+const sessionStore = window.sessionStorage;
+
+let redirectingToSignIn = false;
+
+// Leaves the app with a full page load, so no stale state survives into the next demo session
+export function redirectToSignIn() {
+    redirectingToSignIn = true;
+    window.location.href = routes.SIGN_IN;
+}
+
+// True while a full-page redirect is in flight, so nothing starts a new session before the reload
+export function isRedirectingToSignIn() {
+    return redirectingToSignIn;
+}
 
 type AuthRequestError = ErrorResponse & {
     status?: number;
     transient?: boolean;
     sessionExpired?: boolean;
 };
-
-function isSecurityCheckpointMethod(value: unknown): value is SecurityCheckpointMethod {
-    return value === "password" || value === "totp" || value === "passkey";
-}
 
 function isRecord(value: unknown): value is Record<string, unknown> {
     return typeof value === "object" && value !== null;
@@ -78,15 +86,15 @@ export function isSessionExpiredError(error: unknown): boolean {
 }
 
 export function getStoredToken(): string | null {
-    return localStorage.getItem(TOKEN_KEY);
+    return sessionStore.getItem(TOKEN_KEY);
 }
 
 export function getStoredRefreshToken(): string | null {
-    return localStorage.getItem(REFRESH_KEY);
+    return sessionStore.getItem(REFRESH_KEY);
 }
 
 export function getStoredUser(): UserProfile | null {
-    const storedUser = sessionStorage.getItem(USER_KEY);
+    const storedUser = sessionStore.getItem(USER_KEY);
     if (!storedUser) {
         return null;
     }
@@ -94,38 +102,38 @@ export function getStoredUser(): UserProfile | null {
     try {
         return JSON.parse(storedUser) as UserProfile;
     } catch {
-        sessionStorage.removeItem(USER_KEY);
+        sessionStore.removeItem(USER_KEY);
         return null;
     }
 }
 
 export function storeUser(user: UserProfile) {
-    sessionStorage.setItem(USER_KEY, JSON.stringify(user));
+    sessionStore.setItem(USER_KEY, JSON.stringify(user));
 }
 
 export function clearStoredUser() {
-    sessionStorage.removeItem(USER_KEY);
+    sessionStore.removeItem(USER_KEY);
 }
 
 function storeTokens(access: string, refresh: string, expiresIn?: number) {
-    localStorage.setItem(TOKEN_KEY, access);
-    localStorage.setItem(REFRESH_KEY, refresh);
+    sessionStore.setItem(TOKEN_KEY, access);
+    sessionStore.setItem(REFRESH_KEY, refresh);
     if (expiresIn != null) {
-        localStorage.setItem(EXPIRY_KEY, String(Date.now() + expiresIn * 1000));
+        sessionStore.setItem(EXPIRY_KEY, String(Date.now() + expiresIn * 1000));
     }
 }
 
 function isTokenExpiringSoon(): boolean {
-    const expiry = localStorage.getItem(EXPIRY_KEY);
+    const expiry = sessionStore.getItem(EXPIRY_KEY);
     if (!expiry) return false;
     // Consider expired if within 2 minutes of expiry
     return Date.now() >= Number(expiry) - 120_000;
 }
 
 export function clearTokens() {
-    localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem(REFRESH_KEY);
-    localStorage.removeItem(EXPIRY_KEY);
+    sessionStore.removeItem(TOKEN_KEY);
+    sessionStore.removeItem(REFRESH_KEY);
+    sessionStore.removeItem(EXPIRY_KEY);
     clearStoredUser();
 }
 
@@ -155,15 +163,7 @@ export async function request<T>(
     const headers: Record<string, string> = {
         ...(options.headers as Record<string, string> | undefined),
     };
-    let token = getStoredToken();
-
-    // Proactively refresh if the token is about to expire
-    if (token && isTokenExpiringSoon()) {
-        const refreshed = await tryRefresh();
-        if (refreshed) {
-            token = getStoredToken();
-        }
-    }
+    const token = await getFreshAccessToken();
 
     if (token) {
         headers["Authorization"] = `Bearer ${token}`;
@@ -199,7 +199,7 @@ export async function request<T>(
 
         if (refreshed === "invalid") {
             clearTokens();
-            window.location.href = routes.SIGN_IN;
+            redirectToSignIn();
             throw {
                 error: i18n.t("errors.sessionExpired"),
                 status: 401,
@@ -240,60 +240,24 @@ async function tryRefresh(): Promise<"success" | "invalid" | "unavailable"> {
     }
 }
 
-export async function signIn(email: string, password: string, totpCode?: string) {
-    const params: Record<string, string> = {
-        grant_type: "password",
-        username: email,
-        password,
-        scope: "offline_access",
-    };
-    if (totpCode) params.totp_code = totpCode;
+// Returns the current access token, refreshing it first if it is about to expire.
+// Used by fetch requests and the realtime connection.
+export async function getFreshAccessToken(): Promise<string | null> {
+    if (getStoredToken() && isTokenExpiringSoon()) {
+        await tryRefresh();
+    }
 
-    const data = await tokenRequest(params);
+    return getStoredToken();
+}
+
+// Creates a brand new passwordless "Demo User NNNN" account and signs into it
+export async function startDemoSession() {
+    const data = await tokenRequest({
+        grant_type: DEMO_GRANT_TYPE,
+        scope: "offline_access",
+    });
     storeTokens(data.access_token, data.refresh_token, data.expires_in);
     return data;
-}
-
-export function storePendingTwoFactor(checkpoint: PendingTwoFactorSession) {
-    sessionStorage.setItem(PENDING_TWO_FACTOR_KEY, JSON.stringify(checkpoint));
-}
-
-export function getPendingTwoFactor(): PendingTwoFactorSession | null {
-    const raw = sessionStorage.getItem(PENDING_TWO_FACTOR_KEY);
-    if (!raw) return null;
-
-    try {
-        const parsed = JSON.parse(raw) as Partial<PendingTwoFactorSession>;
-        if (typeof parsed.twoFactorId !== "string") {
-            return null;
-        }
-
-        const methods = Array.isArray(parsed.methods)
-            ? parsed.methods.filter(isSecurityCheckpointMethod)
-            : [];
-
-        return {
-            twoFactorId: parsed.twoFactorId,
-            methods,
-            displayName: typeof parsed.displayName === "string" ? parsed.displayName : null,
-            profilePictureUrl: typeof parsed.profilePictureUrl === "string" ? parsed.profilePictureUrl : null,
-            email: typeof parsed.email === "string" ? parsed.email : null,
-        };
-    } catch {
-        return null;
-    }
-}
-
-export function clearPendingTwoFactor() {
-    sessionStorage.removeItem(PENDING_TWO_FACTOR_KEY);
-}
-
-export async function signUp(email: string, password: string, displayName?: string) {
-    await request("/auth/signup", {
-        method: "POST",
-        body: JSON.stringify({ email, password, displayName }),
-    });
-    return signIn(email, password);
 }
 
 export async function clearSession() {
@@ -313,114 +277,6 @@ export function updateProfile(displayName: string) {
         method: "PUT",
         body: JSON.stringify({ displayName }),
     });
-}
-
-export function changePassword(currentPassword: string, newPassword: string) {
-    return request<UserProfile>("/auth/password/change", {
-        method: "POST",
-        body: JSON.stringify({ currentPassword, newPassword }),
-    });
-}
-
-export function setPassword(newPassword: string) {
-    return request<UserProfile>("/auth/password/change", {
-        method: "POST",
-        body: JSON.stringify({ currentPassword: "", newPassword }),
-    });
-}
-
-export function setupTotp() {
-    return request<TotpSetupResponse>("/auth/totp/setup", { method: "POST" });
-}
-
-export function verifyTotp(code: string) {
-    return request<UserProfile>("/auth/totp/verify", {
-        method: "POST",
-        body: JSON.stringify({ code }),
-    });
-}
-
-export function disableTotp(password: string) {
-    return request<UserProfile>("/auth/totp/disable", {
-        method: "POST",
-        body: JSON.stringify({ password }),
-    });
-}
-
-export function listPasskeys() {
-    return request<PasskeyInfo[]>("/auth/passkeys");
-}
-
-export function beginPasskeyRegister() {
-    return request<{ options: unknown; challengeId: string }>("/auth/passkeys/register/begin", {
-        method: "POST",
-    });
-}
-
-export function completePasskeyRegister(challengeId: string, name: string, attestation: unknown) {
-    return request<PasskeyInfo>("/auth/passkeys/register/complete", {
-        method: "POST",
-        body: JSON.stringify({
-            challengeId,
-            name,
-            attestationResponseJson: JSON.stringify(attestation),
-        }),
-    });
-}
-
-export function beginPasskeySignIn() {
-    return request<{ options: unknown; challengeId: string }>("/auth/passkeys/signin/begin", {
-        method: "POST",
-    });
-}
-
-export function beginTwoFactorPasskey(twoFactorId: string) {
-    return request<{ options: unknown; challengeId: string }>("/auth/2fa/passkeys/begin", {
-        method: "POST",
-        body: JSON.stringify({ twoFactorId }),
-    });
-}
-
-export async function completePasskeySignIn(challengeId: string, assertion: unknown) {
-    const data = await tokenRequest({
-        grant_type: "urn:custom:passkey",
-        challenge_id: challengeId,
-        assertion_json: JSON.stringify(assertion),
-        scope: "offline_access",
-    });
-    storeTokens(data.access_token, data.refresh_token, data.expires_in);
-    return data;
-}
-
-export async function completeTwoFactor(
-    twoFactorId: string,
-    totpCode?: string,
-    challengeId?: string,
-    assertionJson?: string,
-) {
-    const params: Record<string, string> = {
-        grant_type: "urn:custom:2fa",
-        two_factor_id: twoFactorId,
-        scope: "offline_access",
-    };
-    if (totpCode) params.totp_code = totpCode;
-    if (challengeId) params.challenge_id = challengeId;
-    if (assertionJson) params.assertion_json = assertionJson;
-
-    const data = await tokenRequest(params);
-    storeTokens(data.access_token, data.refresh_token, data.expires_in);
-    return data;
-}
-
-export function deletePasskey(id: string, password: string) {
-    return request<void>(`/auth/passkeys/${encodeURIComponent(id)}`, {
-        method: "DELETE",
-        body: JSON.stringify({ password }),
-    });
-}
-
-export function getProfilePictureUrl(userId: string): string {
-    return `${getApiRootEndpoint()}/auth/pfp/${encodeURIComponent(userId)}`;
 }
 
 export function resolveUrl(url: string) {
@@ -447,112 +303,5 @@ export function setProfilePictureUrl(url: string) {
     return request<UserProfile>("/auth/pfp/url", {
         method: "POST",
         body: JSON.stringify({ url }),
-    });
-}
-
-export function deleteProfilePicture() {
-    return request<UserProfile>("/auth/pfp", { method: "DELETE" });
-}
-
-export async function deleteAccount() {
-    await request<void>("/auth/account", {
-        method: "DELETE",
-        body: JSON.stringify({ confirmation: "DELETE" }),
-    });
-    clearTokens();
-}
-
-export function getAuthConfig() {
-    return request<AuthConfigResponse>("/auth/config");
-}
-
-export function getExternalChallengeUrl(provider: string, returnUrl?: string): string {
-    const base = `${getApiRootEndpoint()}/auth/external/challenge/${encodeURIComponent(provider)}`;
-    if (returnUrl) return `${base}?returnUrl=${encodeURIComponent(returnUrl)}`;
-    return base;
-}
-
-export async function exchangeExternalCode(code: string) {
-    const data = await tokenRequest({
-        grant_type: "urn:custom:external",
-        code,
-        scope: "offline_access",
-    });
-    storeTokens(data.access_token, data.refresh_token, data.expires_in);
-    return data;
-}
-
-export function getSudoMethods() {
-    return request<SecurityCheckpointMethod[]>("/auth/sudo/methods");
-}
-
-export async function verifySudo(
-    password?: string,
-    totpCode?: string,
-    challengeId?: string,
-    assertionJson?: string,
-) {
-    const params: Record<string, string> = { grant_type: "urn:custom:sudo" };
-    if (password) params.password = password;
-    if (totpCode) params.totp_code = totpCode;
-    if (challengeId) params.challenge_id = challengeId;
-    if (assertionJson) params.assertion_json = assertionJson;
-
-    const token = getStoredToken();
-    const res = await fetch(`${getApiRootEndpoint()}/auth/token`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-        body: new URLSearchParams(params),
-    });
-    const data = await res.json();
-    if (!res.ok) throw data;
-
-    // Store the sudo access token (short-lived, with sudo claim).
-    // Keep existing refresh token, refreshing will downgrade to a regular token.
-    localStorage.setItem(TOKEN_KEY, data.access_token);
-    if (data.expires_in != null) {
-        localStorage.setItem(EXPIRY_KEY, String(Date.now() + data.expires_in * 1000));
-    }
-}
-
-export function sendVerificationEmail() {
-    return request<{ message: string }>("/auth/email/verify/send", { method: "POST" });
-}
-
-export function confirmEmailVerification(code: string) {
-    return request<UserProfile>("/auth/email/verify/confirm", {
-        method: "POST",
-        body: JSON.stringify({ code }),
-    });
-}
-
-export function sendPasswordResetEmail(email: string) {
-    return request<{ message: string }>("/auth/email/password-reset/send", {
-        method: "POST",
-        body: JSON.stringify({ email }),
-    });
-}
-
-export function confirmPasswordReset(email: string, code: string, newPassword: string) {
-    return request<{ message: string }>("/auth/email/password-reset/confirm", {
-        method: "POST",
-        body: JSON.stringify({ email, code, newPassword }),
-    });
-}
-
-export function sendChangeEmail(newEmail: string) {
-    return request<{ message: string }>("/auth/email/change/send", {
-        method: "POST",
-        body: JSON.stringify({ newEmail }),
-    });
-}
-
-export function confirmChangeEmail(code: string) {
-    return request<UserProfile>("/auth/email/change/confirm", {
-        method: "POST",
-        body: JSON.stringify({ code }),
     });
 }
