@@ -37,16 +37,16 @@ export default function RepairJobSummary({ job, headingId, headingRef, viewers }
                     id={headingId}
                     ref={headingRef}
                     tabIndex={-1}
-                    className="font-mono text-sm font-semibold tracking-wide text-muted-foreground outline-none focus-visible:rounded-sm focus-visible:ring-[3px] focus-visible:ring-ring"
+                    className="text-sm font-medium text-muted-foreground tabular-nums outline-none focus-visible:rounded-sm focus-visible:ring-[3px] focus-visible:ring-ring"
                 >
                     {t("repairs.detail.heading", { reference: job.reference })}
                 </h2>
-                <p className="mt-1.5 text-xl leading-snug font-semibold whitespace-pre-wrap wrap-anywhere sm:text-2xl">
+                <p className="mt-1 text-xl leading-snug font-semibold whitespace-pre-wrap wrap-anywhere">
                     {job.description}
                 </p>
             </div>
 
-            <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2 2xl:grid-cols-4">
+            <dl className="grid grid-cols-1 gap-4 border-y py-4 sm:grid-cols-2 2xl:grid-cols-4">
                 <RepairMetaItem icon={IconHome} label={t("repairs.detail.house")}>
                     {job.houseName}
                 </RepairMetaItem>

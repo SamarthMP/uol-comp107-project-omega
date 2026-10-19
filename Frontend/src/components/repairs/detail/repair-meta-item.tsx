@@ -11,9 +11,7 @@ interface RepairMetaItemProps {
 export default function RepairMetaItem({ icon: Icon, label, children }: RepairMetaItemProps) {
     return (
         <div className="flex min-w-0 items-start gap-2.5">
-            <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground" aria-hidden>
-                <Icon className="size-4" />
-            </span>
+            <Icon className="mt-0.5 size-5 shrink-0 text-muted-foreground" aria-hidden />
             <div className="min-w-0">
                 <dt className="text-sm text-muted-foreground">{label}</dt>
                 <dd className="font-medium wrap-anywhere">{children}</dd>

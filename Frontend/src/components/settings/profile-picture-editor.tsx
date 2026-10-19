@@ -140,7 +140,7 @@ export default function ProfilePictureEditor({
                         </TabsList>
                         <TabsContent value="upload" className="space-y-4 pt-2">
                             <div
-                                className="border-2 border-dashed rounded-lg p-8 text-center cursor-pointer hover:border-primary/50 transition-colors"
+                                className="border rounded-lg p-8 text-center cursor-pointer hover:border-primary transition-colors"
                                 onClick={() => fileInputRef.current?.click()}
                             >
                                 <p className="text-muted-foreground text-sm">

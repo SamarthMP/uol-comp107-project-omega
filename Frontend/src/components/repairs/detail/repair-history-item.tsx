@@ -5,10 +5,10 @@ import { IconCircleCheck, IconClipboardPlus, IconMessage2, IconPlayerPlay, type 
 import { useTranslation } from "react-i18next";
 
 const ENTRY_STYLES: Record<RepairHistoryEntryType, { icon: TablerIcon; className: string }> = {
-    Reported: { icon: IconClipboardPlus, className: "bg-info/12 text-info" },
-    WorkStarted: { icon: IconPlayerPlay, className: "bg-warning/12 text-warning" },
-    ProgressNote: { icon: IconMessage2, className: "bg-primary/12 text-primary" },
-    Completed: { icon: IconCircleCheck, className: "bg-success/15 text-success" },
+    Reported: { icon: IconClipboardPlus, className: "text-info" },
+    WorkStarted: { icon: IconPlayerPlay, className: "text-warning" },
+    ProgressNote: { icon: IconMessage2, className: "text-primary" },
+    Completed: { icon: IconCircleCheck, className: "text-success" },
 };
 
 interface RepairHistoryItemProps {
@@ -26,7 +26,7 @@ export default function RepairHistoryItem({ entry, reporterName, isLatest, isLas
         <li className="relative flex gap-3 pb-6 last:pb-0 sp-rise-in">
             {!isLast && <span aria-hidden className="absolute top-10 bottom-1 left-[1.1875rem] w-px bg-border" />}
 
-            <span className={cn("flex size-10 shrink-0 items-center justify-center rounded-full", className)} aria-hidden>
+            <span className={cn("flex size-10 shrink-0 items-center justify-center rounded-full border bg-card", className)} aria-hidden>
                 <Icon className="size-5" />
             </span>
 
@@ -35,7 +35,7 @@ export default function RepairHistoryItem({ entry, reporterName, isLatest, isLas
                     <p className="font-semibold">
                         {t(`repairs.history.types.${entry.type}`)}
                         {isLatest && (
-                            <span className="ml-2 rounded-full bg-primary/12 px-2 py-0.5 text-sm font-semibold text-primary">
+                            <span className="ml-2 rounded-full border border-primary px-2 py-0.5 text-sm font-semibold text-primary">
                                 {t("repairs.history.latest")}
                             </span>
                         )}
@@ -54,7 +54,7 @@ export default function RepairHistoryItem({ entry, reporterName, isLatest, isLas
                 </p>
 
                 {entry.note && (
-                    <p className="mt-2 rounded-lg bg-muted px-3 py-2 whitespace-pre-wrap wrap-anywhere">{entry.note}</p>
+                    <p className="mt-2 rounded-lg border px-3 py-2 whitespace-pre-wrap wrap-anywhere">{entry.note}</p>
                 )}
             </div>
         </li>

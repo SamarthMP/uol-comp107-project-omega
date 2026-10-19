@@ -20,7 +20,7 @@ export default function PriorityBadge({ priority, className }: PriorityBadgeProp
                 "h-6 gap-1 px-2.5 text-sm font-semibold [&>svg]:size-3.5!",
                 urgent
                     ? "bg-destructive text-destructive-foreground"
-                    : "border-border bg-muted text-muted-foreground",
+                    : "border-input bg-card text-muted-foreground",
                 className
             )}
         >

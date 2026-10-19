@@ -9,7 +9,7 @@ export default function RepairLatestNote({ job }: { job: RepairJob }) {
     if (!job.latestNote) return null;
 
     return (
-        <div key={job.latestNoteAt} className="flex gap-3 rounded-xl bg-accent p-4 text-accent-foreground sp-rise-in">
+        <div key={job.latestNoteAt} className="flex gap-3 rounded-lg border border-l-4 border-l-primary p-4 sp-rise-in">
             <IconNotes className="mt-0.5 size-5 shrink-0 text-primary" aria-hidden />
             <div className="min-w-0">
                 <p className="text-sm font-semibold">

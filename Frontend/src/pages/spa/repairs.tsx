@@ -80,10 +80,9 @@ export default function RepairsPage() {
 
     return (
         <AppPage ref={pageRef} className="gap-6 lg:overflow-hidden">
-            <div className={cn("flex flex-col gap-6", hasSelection && "hidden lg:flex")}>
+            <div className={cn("flex flex-col gap-5", hasSelection && "hidden lg:flex")}>
                 <RepairBoardHeader onReport={() => setReportOpen(true)} />
                 <RepairStatusFilters
-                    jobs={jobs}
                     counts={counts}
                     selected={filters.status}
                     onSelect={(status) => setFilters((current) => ({ ...current, status }))}

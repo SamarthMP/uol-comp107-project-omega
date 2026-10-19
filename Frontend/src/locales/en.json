@@ -42,27 +42,7 @@
     "settingsDescription": "This browser session uses a temporary demo account. Starting a new session signs you in as a different demo user, and every repair stays on the board"
   },
   "presence": {
-    "alsoViewing": "Also viewing: {{names}}",
-    "onlineButton_one": "{{count}} person online, show who",
-    "onlineButton_other": "{{count}} people online, show who",
-    "onlineCount_one": "{{count}} online",
-    "onlineCount_other": "{{count}} online",
-    "onlineTitle": "Online now",
-    "you": "(you)",
-    "viewing": "Viewing",
-    "browsing": "Browsing the board",
-    "connection": {
-      "connecting": "Connecting",
-      "connected": "Live",
-      "reconnecting": "Reconnecting",
-      "disconnected": "Updates paused"
-    },
-    "connectionHint": {
-      "connecting": "Connecting to live updates",
-      "connected": "Changes from everyone appear instantly, no refresh needed",
-      "reconnecting": "Connection lost, trying to reconnect. Saved repairs are safe",
-      "disconnected": "Live updates are paused, but anything you save is still stored. The board catches up as soon as the connection returns"
-    }
+    "alsoViewing": "Also viewing: {{names}}"
   },
   "toasts": {
     "label": "Notifications",
@@ -105,14 +85,7 @@
     },
     "filters": {
       "statusGroup": "Filter repairs by status",
-      "all": "All repairs",
-      "openCount_one": "{{count}} still open",
-      "openCount_other": "{{count}} still open",
-      "urgentCount_one": "{{count}} urgent",
-      "urgentCount_other": "{{count}} urgent",
-      "noneUrgent": "None urgent",
-      "completedToday_one": "{{count}} completed today",
-      "completedToday_other": "{{count}} completed today"
+      "all": "All repairs"
     },
     "toolbar": {
       "searchLabel": "Search repairs",

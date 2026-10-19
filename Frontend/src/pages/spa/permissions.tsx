@@ -10,7 +10,7 @@ export default function Permissions() {
     return (
         <AppPage>
             <div className="max-w-4xl mx-auto w-full">
-                <h1 className="text-2xl font-bold mb-1">{t("permissions.heading")}</h1>
+                <h1 className="text-2xl mb-1">{t("permissions.heading")}</h1>
                 <p className="text-muted-foreground mb-6">{t("permissions.description")}</p>
 
                 <Tabs defaultValue="groups" className="w-full">

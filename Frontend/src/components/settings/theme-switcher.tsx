@@ -3,7 +3,6 @@ import { IconDeviceDesktop, IconMoon, IconSun } from "@tabler/icons-react";
 import { useId, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "../ui/button";
-import { ButtonGroup } from "../ui/button-group";
 
 type ThemePref = "light" | "dark" | "system";
 
@@ -27,11 +26,11 @@ export default function ThemeSwitcher() {
     return (
         <div className="flex w-full flex-col gap-2 py-1">
             <span id={labelId} className="text-sm font-medium">{t("theme.label")}</span>
-            <ButtonGroup aria-labelledby={labelId} className="w-full">
+            <div role="group" aria-labelledby={labelId} className="flex flex-wrap gap-2">
                 {THEME_OPTIONS.map(({ value, icon: Icon }) => (
                     <Button
                         key={value}
-                        className="flex-1"
+                        className="flex-1 transition-colors duration-200 ease-sp-md"
                         aria-pressed={currentTheme === value}
                         variant={currentTheme === value ? "default" : "outline"}
                         onClick={() => apply(value)}
@@ -40,7 +39,7 @@ export default function ThemeSwitcher() {
                         {t(`theme.${value}`)}
                     </Button>
                 ))}
-            </ButtonGroup>
+            </div>
         </div>
     );
 }

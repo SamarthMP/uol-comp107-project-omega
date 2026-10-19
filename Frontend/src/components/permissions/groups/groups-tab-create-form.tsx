@@ -84,7 +84,7 @@ export default function CreateGroupForm({
     };
 
     return (
-        <Card className="border-primary/20 shadow-sm">
+        <Card className="border-primary">
             <CardHeader>
                 <CardTitle className="text-base">{t("permissions.createGroup")}</CardTitle>
             </CardHeader>

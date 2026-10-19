@@ -79,7 +79,7 @@ function GroupCard({ group, allFlags, onUpdated }: GroupCardProps) {
     };
 
     return (
-        <Card className="overflow-hidden border-border/70 bg-card/90 backdrop-blur-sm transition-all duration-200 hover:border-border hover:shadow-md">
+        <Card className="overflow-hidden transition-colors duration-200 hover:border-input">
             <CardHeader className="cursor-pointer pl-14" onClick={() => setExpanded((current) => !current)}>
                 <div className="flex items-center justify-between gap-4">
                     <div className="min-w-0 space-y-1">
@@ -149,7 +149,7 @@ function GroupCard({ group, allFlags, onUpdated }: GroupCardProps) {
                         {editingRules ? (
                             <PermissionRuleEditor allFlags={allFlags} rules={selectedRules} onChange={setSelectedRules} />
                         ) : (
-                            <div className="rounded-xl border border-border/70 bg-background/40 p-3">
+                            <div className="rounded-lg border p-3">
                                 {group.rules.length === 0 ? (
                                     <span className="text-sm text-muted-foreground">{t("permissions.noRules")}</span>
                                 ) : (

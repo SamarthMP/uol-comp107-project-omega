@@ -29,7 +29,7 @@ export default function ViewerAvatars({ users, className, size = "default" }: Vi
                 <span
                     role="img"
                     aria-label={label}
-                    className={cn("inline-flex items-center gap-2 text-sm text-muted-foreground sp-rise-in", className)}
+                    className={cn("inline-flex items-center text-sm text-muted-foreground sp-rise-in", className)}
                 >
                     <AvatarGroup>
                         {visible.map((user) => (
@@ -42,10 +42,6 @@ export default function ViewerAvatars({ users, className, size = "default" }: Vi
                         ))}
                         {hidden > 0 && <AvatarGroupCount className={size === "sm" ? "size-6" : "size-7"}>+{hidden}</AvatarGroupCount>}
                     </AvatarGroup>
-                    <span className="relative flex size-2" aria-hidden>
-                        <span className="absolute inline-flex size-full animate-ping rounded-full bg-success opacity-60" />
-                        <span className="relative inline-flex size-2 rounded-full bg-success" />
-                    </span>
                 </span>
             </TooltipTrigger>
             <TooltipContent>{label}</TooltipContent>

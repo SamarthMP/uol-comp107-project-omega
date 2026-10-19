@@ -9,7 +9,7 @@ export default function RepairListSkeleton() {
     return (
         <div role="status" aria-label={t("repairs.list.loading")} className="flex flex-col gap-2">
             {Array.from({ length: PLACEHOLDER_CARDS }, (_, index) => (
-                <div key={index} className="flex flex-col gap-3 rounded-xl border bg-card p-4">
+                <div key={index} className="flex flex-col gap-3 rounded-lg border bg-card p-4">
                     <div className="flex justify-between">
                         <Skeleton className="h-5 w-20" />
                         <Skeleton className="h-6 w-24 rounded-full" />

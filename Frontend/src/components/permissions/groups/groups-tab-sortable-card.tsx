@@ -42,7 +42,7 @@ export default function SortableGroupCard({
             ref={setMeasuredNodeRef}
             style={{ transform: CSS.Transform.toString(transform), transition }}
             className={cn(
-                "permissions-sort-item relative transition-[transform,box-shadow,opacity] duration-200",
+                "permissions-sort-item relative transition-[transform,opacity] duration-200",
                 isDragging && "z-10 opacity-30",
             )}
         >

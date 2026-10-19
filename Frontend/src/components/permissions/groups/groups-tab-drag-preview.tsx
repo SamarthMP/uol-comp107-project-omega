@@ -16,9 +16,9 @@ export default function GroupDragPreview({ group, width }: GroupDragPreviewProps
     return (
         <div
             style={width ? { width } : undefined}
-            className="permissions-drag-overlay relative rounded-xl border border-border/80 bg-card/95 shadow-2xl backdrop-blur-md"
+            className="permissions-drag-overlay relative rounded-lg border border-primary bg-card"
         >
-            <div className="absolute left-4 top-4 rounded-md border border-border/70 bg-background/80 p-1 text-muted-foreground shadow-sm">
+            <div className="absolute left-4 top-4 rounded-md border bg-card p-1 text-muted-foreground">
                 <IconGripVertical className="size-4" />
             </div>
 

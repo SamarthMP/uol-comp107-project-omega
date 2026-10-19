@@ -55,7 +55,7 @@ export default function DemoSession() {
     }, [loading, navigate, returnTo, user]);
 
     return (
-        <main className="flex h-full w-full items-center justify-center bg-sidebar p-4">
+        <main className="flex h-full w-full items-center justify-center bg-background p-4">
             <Card className="w-full max-w-sm items-center gap-5 px-6 py-8 text-center sp-scale-in">
                 <AppLogo className="size-14" />
                 <div className="space-y-1.5">

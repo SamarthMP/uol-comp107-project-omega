@@ -14,7 +14,7 @@ export default function RequireAuth({ children }: { children: React.ReactNode })
     if (loading) {
         return (
             <div className="flex w-full h-full justify-center items-center">
-                <div className="animate-pulse text-muted-foreground"><Spinner /></div>
+                <Spinner className="size-6 text-primary" />
             </div>
         );
     }

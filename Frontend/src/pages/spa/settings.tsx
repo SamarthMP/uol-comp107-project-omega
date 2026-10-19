@@ -13,7 +13,7 @@ export default function Settings() {
         <AppPage>
             <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
                 <div>
-                    <h1 className="mb-1 text-3xl sm:text-4xl">{t("settings.heading")}</h1>
+                    <h1 className="mb-1 text-2xl">{t("settings.heading")}</h1>
                     <p className="text-muted-foreground">{t("settings.description")}</p>
                 </div>
 

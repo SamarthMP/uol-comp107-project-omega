@@ -29,23 +29,23 @@ export default function RepairJobCard({ job, selected, now, viewers, remoteChang
             to={jobRoute(job.id)}
             aria-current={selected ? "page" : undefined}
             className={cn(
-                "group relative block rounded-xl border bg-card p-4 shadow-xs transition-all duration-200 outline-none",
-                "hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md focus-visible:ring-[3px] focus-visible:ring-ring",
-                selected && "border-primary bg-accent ring-1 ring-primary hover:border-primary",
+                "group relative block rounded-lg border bg-card p-4 transition-colors duration-200 ease-sp-md outline-none",
+                "hover:border-input focus-visible:ring-[3px] focus-visible:ring-ring",
+                selected && "border-primary ring-1 ring-primary hover:border-primary",
                 job.priority === "Urgent" && job.status !== "Completed" && "border-l-4 border-l-destructive"
             )}
         >
-            {remoteChangeAt && <span key={remoteChangeAt} aria-hidden className="pointer-events-none absolute inset-0 rounded-xl sp-flash" />}
+            {remoteChangeAt && <span key={remoteChangeAt} aria-hidden className="pointer-events-none absolute inset-0 rounded-lg sp-flash" />}
 
             <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="font-mono text-sm font-semibold text-muted-foreground">{job.reference}</span>
+                <span className="text-sm font-medium text-muted-foreground tabular-nums">{job.reference}</span>
                 <span className="flex flex-wrap items-center gap-1.5">
                     {job.priority === "Urgent" && <PriorityBadge priority={job.priority} />}
                     <StatusBadge status={job.status} />
                 </span>
             </div>
 
-            <p className="mt-2 font-semibold whitespace-pre-line wrap-anywhere lg:line-clamp-4">{job.description}</p>
+            <p className="mt-2 font-semibold leading-snug whitespace-pre-line wrap-anywhere lg:line-clamp-4">{job.description}</p>
 
             <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-sm text-muted-foreground">
                 <span className="flex min-w-0 items-center gap-1">

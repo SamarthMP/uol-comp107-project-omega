@@ -66,7 +66,7 @@ export function AppSidebar() {
 
     return (
         <Sidebar>
-            <SidebarHeader className="h-16 justify-center border-b border-sidebar-border px-4">
+            <SidebarHeader className="h-14 justify-center border-b border-sidebar-border px-4">
                 <Link to={routes.MAIN} className="rounded-md outline-none focus-visible:ring-[3px] focus-visible:ring-ring">
                     <AppBrand />
                 </Link>
@@ -94,7 +94,7 @@ export function AppSidebar() {
                 </nav>
             </SidebarContent>
             <SidebarFooter className="border-t border-sidebar-border p-3">
-                <div className="flex items-center gap-3 rounded-lg p-2">
+                <div className="flex items-center gap-3 p-2">
                     <Avatar user={user} className="size-9" />
                     <div className="min-w-0">
                         <p className="truncate text-sm font-semibold">{user?.displayName}</p>
@@ -120,9 +120,9 @@ function SidebarLink({ name, href, activePrefixes, icon: Icon, isGrouped }: Side
                 aria-current={isActive ? "page" : undefined}
                 onClick={() => isMobile && setOpenMobile(false)}
                 className={cn(
-                    "flex h-10 items-center gap-2.5 rounded-lg px-4 text-sm outline-none",
-                    "transition-all ease-sp-md duration-300 hover:bg-sidebar-accent focus-visible:ring-[3px] focus-visible:ring-ring",
-                    isActive && "bg-sidebar-accent pl-5 font-semibold text-sidebar-accent-foreground",
+                    "relative flex h-10 items-center gap-3 rounded-md px-3 text-sm font-medium text-muted-foreground outline-none",
+                    "transition-colors duration-200 ease-sp-md hover:bg-sidebar-accent hover:text-sidebar-foreground focus-visible:ring-[3px] focus-visible:ring-ring",
+                    isActive && "bg-sidebar-accent font-semibold text-sidebar-foreground before:absolute before:inset-y-2 before:left-0 before:w-[3px] before:rounded-full before:bg-primary",
                     isGrouped ? "mx-0" : "mx-3"
                 )}
             >

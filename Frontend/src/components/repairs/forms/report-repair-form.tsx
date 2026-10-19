@@ -108,7 +108,7 @@ export default function ReportRepairForm({ reporterSuggestions, onCreated, onCan
         <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
             <StatusMessage {...status} />
 
-            <p className="flex items-center gap-2 rounded-lg bg-muted px-3 py-2 text-sm">
+            <p className="flex flex-wrap items-center gap-x-2 gap-y-1 rounded-lg border px-3 py-2 text-sm">
                 <IconHome className="size-4 shrink-0 text-primary" aria-hidden />
                 <span>
                     {t("repairs.report.house")} <strong>{t("brand.houseName")}</strong>

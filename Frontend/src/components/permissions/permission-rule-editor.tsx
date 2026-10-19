@@ -41,7 +41,7 @@ export function PermissionRuleEditor({
                     <div
                         key={flag}
                         className={cn(
-                            "grid items-center gap-3 rounded-xl border border-border/70 bg-card/70 p-3 transition-colors duration-200 hover:border-border hover:bg-accent/20",
+                            "grid items-center gap-3 rounded-lg border bg-card p-3 transition-colors duration-200 hover:border-input",
                             compact ? "grid-cols-1" : "grid-cols-1 lg:grid-cols-[minmax(0,1fr)_auto]",
                         )}
                     >
@@ -52,17 +52,14 @@ export function PermissionRuleEditor({
                             </div>
                         </div>
 
-                        <div className="inline-flex flex-wrap rounded-lg border border-border/70 bg-background/70 p-1 gap-1">
+                        <div className="inline-flex flex-wrap gap-1">
                             {RULE_MODES.map((candidateMode) => (
                                 <Button
                                     key={candidateMode}
                                     type="button"
                                     size="sm"
-                                    variant={mode === candidateMode ? ruleVariant[candidateMode] : "ghost"}
-                                    className={cn(
-                                        "min-w-20 transition-all duration-200",
-                                        mode === candidateMode && "shadow-sm",
-                                    )}
+                                    variant={mode === candidateMode ? ruleVariant[candidateMode] : "outline"}
+                                    className="min-w-20 transition-colors duration-200"
                                     onClick={() => onChange(upsertRule(rules, flag, candidateMode))}
                                 >
                                     {t(`permissions.ruleMode.${candidateMode}`)}

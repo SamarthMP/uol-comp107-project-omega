@@ -50,8 +50,8 @@ export default function StatusMessage(props: ResponseStatusMessageProps) {
             role={isError ? "alert" : undefined}
             className={cn(
                 "sp-rise-in",
-                isError && "border-destructive/40",
-                isSuccess && "border-success/40 bg-success/10 text-success",
+                isError && "border-destructive",
+                isSuccess && "border-success text-success",
                 displayProps.className
             )}
         >

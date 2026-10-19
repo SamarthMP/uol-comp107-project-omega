@@ -35,7 +35,7 @@ export default function RepairStartWork({ job, status, onStarted }: RepairStartW
 
     return (
         <div className="flex flex-col gap-3">
-            <div className="flex flex-col gap-3 rounded-xl border border-dashed border-info/40 bg-info/5 p-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-3 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <p className="font-semibold">{t("repairs.start.title")}</p>
                     <p className="text-sm text-muted-foreground">{t("repairs.start.description")}</p>

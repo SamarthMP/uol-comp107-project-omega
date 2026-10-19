@@ -11,9 +11,9 @@ export default function RepairDetailPlaceholder({ notFound }: { notFound?: boole
     const Icon = notFound ? IconClipboardX : IconClipboardList;
 
     return (
-        <Empty className="h-full min-h-72 border bg-card/60">
+        <Empty className="h-full min-h-72 border bg-card">
             <EmptyHeader>
-                <EmptyMedia variant="icon" className="size-12 rounded-xl bg-accent text-primary [&_svg:not([class*='size-'])]:size-6">
+                <EmptyMedia variant="icon" className="size-12 rounded-full border bg-card text-primary [&_svg:not([class*='size-'])]:size-6">
                     <Icon />
                 </EmptyMedia>
                 <EmptyTitle>{t(notFound ? "repairs.detail.notFoundTitle" : "repairs.detail.placeholderTitle")}</EmptyTitle>

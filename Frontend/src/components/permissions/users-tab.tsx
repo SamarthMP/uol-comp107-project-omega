@@ -98,11 +98,11 @@ export default function UsersTab() {
             </div>
 
             {searchResults.length > 0 && (
-                <div className="border rounded-md divide-y max-h-60 overflow-y-auto">
+                <div className="border rounded-lg bg-card divide-y max-h-60 overflow-y-auto">
                     {searchResults.map((user) => (
                         <button
                             key={user.id}
-                            className="w-full flex items-center justify-between px-3 py-2 text-sm text-left hover:bg-accent/50 transition-colors"
+                            className="w-full flex items-center justify-between px-3 py-2 text-sm text-left hover:bg-accent transition-colors"
                             onClick={() => selectUser(user.id)}
                         >
                             <span>

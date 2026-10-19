@@ -41,7 +41,7 @@ export default function PriorityPicker({ id, value, onChange, disabled }: Priori
                             htmlFor={itemId}
                             className={cn(
                                 "cursor-pointer transition-colors",
-                                urgent && "has-data-checked:border-destructive has-data-checked:bg-destructive/8"
+                                urgent && "has-data-checked:border-destructive has-data-checked:ring-destructive"
                             )}
                         >
                             <Field orientation="horizontal">

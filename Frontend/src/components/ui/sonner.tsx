@@ -30,7 +30,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
             toastOptions={{
                 closeButtonAriaLabel: t("toasts.close"),
                 classNames: {
-                    toast: "cn-toast text-sm!",
+                    toast: "cn-toast text-sm! shadow-none!",
                     title: "text-sm! font-semibold! wrap-anywhere",
                     description: "text-sm! text-muted-foreground! wrap-anywhere",
                     actionButton: "h-8! px-3! text-sm! font-semibold! bg-primary! text-primary-foreground!",

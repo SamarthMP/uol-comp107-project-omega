@@ -20,7 +20,7 @@ export default function RepairHistoryTimeline({ job }: { job: RepairJob }) {
                     </h3>
                     <p className="text-sm text-muted-foreground">{t("repairs.history.order")}</p>
                 </div>
-                <span className="rounded-full bg-muted px-2.5 py-0.5 text-sm font-medium text-muted-foreground">
+                <span className="text-sm text-muted-foreground">
                     {t("repairs.history.count", { count: job.history.length })}
                 </span>
             </div>

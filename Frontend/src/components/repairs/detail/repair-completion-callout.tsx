@@ -25,7 +25,7 @@ export default function RepairCompletionCallout({ job, status, autoFocus }: Repa
     }, [autoFocus]);
 
     return (
-        <Card role="region" aria-labelledby={headingId} className="gap-4 bg-success/8 p-5 ring-success/40 sm:p-6 sp-rise-in">
+        <Card role="region" aria-labelledby={headingId} className="gap-4 border-success p-5 sm:p-6 sp-rise-in">
             {status && <StatusMessage {...status} />}
 
             <div className="flex items-start gap-3">
@@ -47,7 +47,7 @@ export default function RepairCompletionCallout({ job, status, autoFocus }: Repa
                 </div>
             </div>
 
-            <div className="rounded-lg bg-card p-4 ring-1 ring-foreground/10">
+            <div className="rounded-lg border p-4">
                 <p className="text-sm font-semibold text-muted-foreground">{t("repairs.completed.noteLabel")}</p>
                 <p className="mt-1 text-base whitespace-pre-wrap wrap-anywhere">{job.completionNote}</p>
             </div>

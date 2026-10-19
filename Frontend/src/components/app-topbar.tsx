@@ -1,6 +1,4 @@
 import AppLogo from "@/components/brand/app-logo";
-import ConnectionIndicator from "@/components/presence/connection-indicator";
-import OnlineUsers from "@/components/presence/online-users";
 import { useAuth } from "@/hooks/use-auth";
 import routes from "@/lib/routes";
 import { useState } from "react";
@@ -18,7 +16,7 @@ export default function TopBar() {
     const [menuOpen, setMenuOpen] = useState(false);
 
     return (
-        <header className="z-10 flex h-14 shrink-0 items-center gap-2 border-b bg-background/85 px-3 backdrop-blur sm:px-4">
+        <header className="z-10 flex h-14 shrink-0 items-center gap-2 border-b bg-card px-3 sm:px-4">
             <SidebarTrigger />
             <Link
                 to={routes.MAIN}
@@ -28,9 +26,7 @@ export default function TopBar() {
                 <span className="sr-only sm:not-sr-only">{t("brand.houseName")}</span>
             </Link>
 
-            <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
-                <ConnectionIndicator />
-                <OnlineUsers />
+            <div className="ml-auto flex items-center">
                 <LargePopover open={menuOpen} onOpenChange={setMenuOpen}>
                     <LargePopoverTrigger asChild>
                         <Button variant="ghost" size="icon" className="size-10" aria-label={t("userMenu.open", { name: user?.displayName ?? "" })}>

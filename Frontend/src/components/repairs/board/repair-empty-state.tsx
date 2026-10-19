@@ -15,9 +15,9 @@ export default function RepairEmptyState({ filtered, onReport, onClearFilters }:
     const Icon = filtered ? IconFilterOff : IconTool;
 
     return (
-        <Empty className="border bg-card/60 sp-rise-in">
+        <Empty className="border bg-card sp-rise-in">
             <EmptyHeader>
-                <EmptyMedia variant="icon" className="size-12 rounded-xl bg-accent text-primary [&_svg:not([class*='size-'])]:size-6">
+                <EmptyMedia variant="icon" className="size-12 rounded-full border bg-card text-primary [&_svg:not([class*='size-'])]:size-6">
                     <Icon />
                 </EmptyMedia>
                 <EmptyTitle>{t(filtered ? "repairs.empty.filteredTitle" : "repairs.empty.title")}</EmptyTitle>

@@ -17,7 +17,7 @@ export default function DragHandle({
         <button
             ref={setActivatorNodeRef}
             type="button"
-            className="permissions-drag-handle absolute left-4 top-4 z-20 rounded-md border border-border/70 bg-background/80 p-1 text-muted-foreground shadow-sm transition-colors hover:bg-accent hover:text-foreground"
+            className="permissions-drag-handle absolute left-4 top-4 z-20 rounded-md border bg-card p-1 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
             onClick={(event) => event.stopPropagation()}
             {...attributes}
             {...listeners}
