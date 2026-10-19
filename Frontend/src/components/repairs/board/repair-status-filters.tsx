@@ -1,3 +1,4 @@
+import { ButtonGroup } from "@/components/ui/button-group";
 import type { RepairCounts } from "@/lib/repairs/repair-filters";
 import type { StatusFilter } from "@/lib/repairs/repair-types";
 import { useTranslation } from "react-i18next";
@@ -16,21 +17,24 @@ interface RepairStatusFiltersProps {
     onSelect: (status: StatusFilter) => void;
 }
 
-// Pill bar of status filters for the list, each with its job count
+// Segmented status filter for the list, each segment with its job count.
+// On narrow screens the strip scrolls sideways instead of wrapping, so the segments stay joined.
 export default function RepairStatusFilters({ counts, selected, onSelect }: RepairStatusFiltersProps) {
     const { t } = useTranslation();
 
     return (
-        <div role="group" aria-label={t("repairs.filters.statusGroup")} className="flex flex-wrap gap-2">
-            {STATUS_FILTERS.map(({ value, labelKey }) => (
-                <RepairStatusPill
-                    key={value}
-                    label={t(labelKey)}
-                    count={counts.total[value]}
-                    selected={selected === value}
-                    onSelect={() => onSelect(value)}
-                />
-            ))}
+        <div className="-mx-4 -my-1 overflow-x-auto px-4 py-1 sm:mx-0 sm:my-0 sm:overflow-visible sm:px-0 sm:py-0">
+            <ButtonGroup aria-label={t("repairs.filters.statusGroup")} className="w-max">
+                {STATUS_FILTERS.map(({ value, labelKey }) => (
+                    <RepairStatusPill
+                        key={value}
+                        label={t(labelKey)}
+                        count={counts.total[value]}
+                        selected={selected === value}
+                        onSelect={() => onSelect(value)}
+                    />
+                ))}
+            </ButtonGroup>
         </div>
     );
 }

@@ -183,15 +183,13 @@
       "count_one": "{{count}} entry",
       "count_other": "{{count}} entries",
       "latest": "Latest",
-      "by": "By {{name}}",
-      "reportedBy": "Reported by {{reporter}}, logged by {{name}}",
-      "statusAfter": "Status: {{status}}",
-      "types": {
-        "Reported": "Repair reported",
-        "WorkStarted": "Work started",
-        "ProgressNote": "Progress note added",
-        "Completed": "Repair completed"
-      }
+      "events": {
+        "Reported": "Repair reported by {{name}}",
+        "WorkStarted": "Work started by {{name}}",
+        "ProgressNote": "Progress note added by {{name}}",
+        "Completed": "Repair completed by {{name}}"
+      },
+      "loggedBy": "Logged by {{name}}"
     },
     "report": {
       "title": "Report a repair",
