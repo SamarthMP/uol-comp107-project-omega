@@ -7,7 +7,7 @@ services:
         BUILD_CONFIGURATION: Release
     environment:
       ASPNETCORE_ENVIRONMENT: Production
-      ASPNETCORE_HTTP_PORTS: 8080
+      ASPNETCORE_HTTP_PORTS: 9035
       ConnectionStrings__DefaultConnection: Data Source=/app/data/app.db
       AUTH_SECRET: ${AUTH_SECRET}
       GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID:-}
@@ -20,7 +20,7 @@ services:
       SMTP_FROM_NAME: ${SMTP_FROM_NAME:-}
       SMTP_USE_SSL: ${SMTP_USE_SSL:-}
     ports:
-      - "6768:8080"
+      - "9035:9035"
     volumes:
       - backend_data:/app/data
     restart: unless-stopped

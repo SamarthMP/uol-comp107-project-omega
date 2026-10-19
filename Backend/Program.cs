@@ -20,7 +20,7 @@ using System.Text.Json;
 using System.Threading.RateLimiting;
 
 // TODO: (IMPORTANT) Configure these properly for production
-AuthConfig.PrimaryHost = "http://localhost:6768";
+AuthConfig.PrimaryHost = "https://uol-comp107-project-omega.samarth.cc";
 AuthConfig.AppName = "Meadow House Repairs";
 AuthConfig.AuthProviders.Add(new GithubAuthProvider());
 
