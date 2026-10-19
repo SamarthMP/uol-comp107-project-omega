@@ -1,0 +1,13 @@
+.git
+.vs
+.vscode
+Backend/.env
+Backend/app_data
+Backend/bin
+Backend/obj
+Frontend/dist
+Frontend/node_modules
+**/.idea
+**/*.rsuser
+**/*.suo
+**/*.user

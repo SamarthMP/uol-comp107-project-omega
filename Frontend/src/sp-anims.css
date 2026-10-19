@@ -1,0 +1,58 @@
+/*
+Samarth's fine tuned mini animation library.
+License: do whatever you want with it but if you get rich from it slide me some bands pls ✌️
+
+https://github.com/SamarthMP
+*/
+
+:root {
+    /* I spent a long time finding the perfect easing curves */
+    --sp-ease-md: cubic-bezier(.17,.67,.41,.99);
+    --sp-ease-lg: cubic-bezier(.22,.61,.36,1);
+}
+
+
+@keyframes sp-scale-in {
+  0% {
+    transform: scale(1.02);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes sp-slide-in {
+  0% {
+    transform: translateX(10px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.sp-scale-in {
+  animation: sp-scale-in 600ms var(--sp-ease-md) forwards;
+}
+
+.sp-slide-in {
+  animation: sp-slide-in 600ms var(--sp-ease-md) forwards;
+}
+
+.sp-page-anim {
+  animation: sp-scale-in 400ms var(--sp-ease-md) forwards;
+}
+
+
+.ease-sp-md {
+  animation-timing-function: var(--sp-ease-md);
+  transition-timing-function: var(--sp-ease-md);
+}
+
+.ease-sp-lg {
+  animation-timing-function: var(--sp-ease-lg);
+  transition-timing-function: var(--sp-ease-lg);
+}
